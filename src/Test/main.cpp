@@ -1,6 +1,5 @@
-#include "Game/World.hpp"
-#include "Game/InjectedRandomDevice.h" // future "game context" or something similar to...
-#include "IO/io.include.h"
+#include "NewGame/interface.include.h"
+#include "IO/interface.include.h"
 #include "scenarios.h"
 
 #include <format>
