@@ -1,4 +1,5 @@
 #include "Game/World.hpp"
+#include "Game/InjectedRandomDevice.h"
 #include "IO/io.include.h"
 
 #include <fstream>
@@ -6,6 +7,8 @@
 int main(int argc, char** argv)
 {
 	using namespace sw;
+
+	game::InjectedRandomDevice::init();
 
 	if (argc != 2)
 	{

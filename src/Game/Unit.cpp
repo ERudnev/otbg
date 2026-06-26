@@ -1,13 +1,8 @@
 #include "Unit.hpp"
-
-#include <random>
+#include "InjectedRandomDevice.h"
 
 namespace sw::game
 {
-	std::random_device randomDevice;
-	std::mt19937 random(randomDevice());
-	std::uniform_int_distribution<std::mt19937::result_type> randomDistribution(1, 1000);
-
 	Unit::Unit(
 			const uint32_t id,
 			const Position currentPosition,
@@ -70,7 +65,7 @@ namespace sw::game
 
 	bool Unit::tryApplyAbility(Unit& target) const
 	{
-		if (const uint32_t value = randomDistribution(random); value < _chance)
+		if (const uint32_t value = InjectedRandomDevice::next(); value < _chance)
 		{
 			target.applyDamage(_rending);
 			return true;
