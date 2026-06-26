@@ -1,10 +1,5 @@
 #include "Game/World.hpp"
-#include "IO/Commands/CreateMap.hpp"
-#include "IO/Commands/March.hpp"
-#include "IO/Commands/SpawnHunter.hpp"
-#include "IO/Commands/SpawnSwordsman.hpp"
-#include "IO/System/CommandParser.hpp"
-#include "IO/System/EventSystem.hpp"
+#include "IO/io.include.h"
 
 #include <fstream>
 

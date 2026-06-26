@@ -6,3 +6,6 @@
 
 # clangd index cache
 .cache/
+
+# AI-assisted notes (thinking cache)
+/docs/AI_analysis/
