@@ -1,0 +1,8 @@
+# CMake out-of-source build (Ninja / Clang)
+/build/
+
+# Cursor / VS Code (local debug & task configs)
+.vscode/
+
+# clangd index cache
+.cache/
