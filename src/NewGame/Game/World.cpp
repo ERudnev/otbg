@@ -1,10 +1,11 @@
 #include "World.h"
 
-#include "NewGame/Internals/macros.h"
+#include "IO/interface.include.h"
+#include "NewGame/Core/Interface/macros.h"
 
-namespace sw::game
+namespace swexp::game
 {
-	World::World(EventSystem&)
+	World::World(sw::EventSystem&)
 	{
 		_INCOMPLETE_;
 	}

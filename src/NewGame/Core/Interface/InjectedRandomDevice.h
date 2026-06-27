@@ -2,11 +2,10 @@
 
 #include <cstdint>
 
-namespace sw::game
+namespace swexp::core::interface
 {
-	class InjectedRandomDevice
+	struct InjectedRandomDevice
 	{
-	public:
 		static void init();
 		static void init(uint32_t seed);
 		static uint32_t next();

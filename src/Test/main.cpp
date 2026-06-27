@@ -1,59 +1,15 @@
 #include "NewGame/interface.include.h"
 #include "IO/interface.include.h"
+#include "internals/Capture.h"
 #include "scenarios.h"
 
 #include <format>
 #include <iostream>
 #include <sstream>
 
-namespace
-{
-    class CoutCapture
-    {
-    public:
-        CoutCapture() :
-                _oldBuffer(std::cout.rdbuf(_buffer.rdbuf()))
-        {}
-
-        ~CoutCapture()
-        {
-            std::cout.rdbuf(_oldBuffer);
-        }
-
-        tests::Strings lines() const
-        {
-            tests::Strings result;
-            std::istringstream input(_buffer.str());
-            for (std::string line; std::getline(input, line);)
-            {
-                if (!line.empty() && line.back() == '\r')
-                {
-                    line.pop_back();
-                }
-                result.push_back(line);
-            }
-            return result;
-        }
-
-    private:
-        std::ostringstream _buffer;
-        std::streambuf* _oldBuffer;
-    };
-
-    std::istringstream serialise(const tests::Strings& commands)
-    {
-        std::ostringstream output;
-        for (const auto& command : commands)
-        {
-            output << command << '\n';
-        }
-        return std::istringstream(output.str());
-    }
-}
-
 int main(int, char**)
 {
-    using namespace sw;
+    using namespace swexp;
 
     const tests::Bucket bucket = tests::Usage::generateScenarios();
     int failedCount = 0;
@@ -62,7 +18,9 @@ int main(int, char**)
     {
         try
         {
-            game::InjectedRandomDevice::init(0);
+            using namespace sw;
+
+            swexp::core::interface::InjectedRandomDevice::init(0);
             EventSystem events;
             game::World world(events);
 
@@ -89,8 +47,8 @@ int main(int, char**)
 
             tests::Strings grabbed;
             {
-                CoutCapture capture;
-                auto input = serialise(scenario.commands);
+                tests::internals::CoutCapture capture;
+                auto input = tests::internals::serialise(scenario.commands);
 
                 parser.parse(input);
 
@@ -121,8 +79,11 @@ int main(int, char**)
         catch (std::exception& e)
         {
             std::cout << std::format(R"(CRITICAL: Scenario "{}": {})", name, e.what()) << std::endl;
+            ++failedCount;
         }
     }
+
+    std::cout << std::format("finished {} tests with {}/{} good/failed", bucket.size(), bucket.size() - failedCount, failedCount);
 
     return failedCount == 0 ? 0 : 1;
 }

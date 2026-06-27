@@ -1,8 +1,8 @@
-#include "InjectedRandomDevice.h"
+#include "NewGame/Core/Interface/InjectedRandomDevice.h"
 
 #include <random>
 
-namespace sw::game
+namespace swexp::core::interface
 {
 	namespace
 	{

@@ -2,7 +2,9 @@
 
 #include <cstdint>
 
-namespace sm::game::basic
+namespace swexp::core::types
 {
-	using UnitId = uint32_t;
+    // TODO: make non-alias
+    using Id = uint32_t;
+
 }
