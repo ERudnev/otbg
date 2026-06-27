@@ -1,0 +1,59 @@
+#pragma once
+
+#include "NewGame/Core/Model/Linear.h"
+#include "NewGame/Core/Model/Intertype.h"
+
+#include <typeinfo>
+
+namespace swexp::core::model::complex
+{
+    struct State : protected intertype::Composition {
+
+        template<typename Meta>
+        const linear::State<Meta>& elements() const;
+
+        template<typename Meta>
+        linear::State<Meta>& elements();
+
+    };
+}
+
+// Impl:
+namespace swexp::core::model::complex
+{
+    template<typename Meta>
+    const linear::State<Meta>& State::elements() const
+    {
+        const auto iterator = lines.find(typeid(Meta));
+        if (iterator == lines.end())
+        {
+            throw std::bad_cast();
+        }
+
+        const auto* typed = dynamic_cast<const linear::State<Meta>*>(iterator->second.get());
+        if (typed == nullptr)
+        {
+            throw std::bad_cast();
+        }
+
+        return *typed;
+    }
+
+    template<typename Meta>
+    linear::State<Meta>& State::elements()
+    {
+        const auto iterator = lines.find(typeid(Meta));
+        if (iterator == lines.end())
+        {
+            throw std::bad_cast();
+        }
+
+        auto* typed = dynamic_cast<linear::State<Meta>*>(iterator->second.get());
+        if (typed == nullptr)
+        {
+            throw std::bad_cast();
+        }
+
+        return *typed;
+    }
+}

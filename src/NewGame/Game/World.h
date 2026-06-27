@@ -2,20 +2,23 @@
 
 #include "NewGame/Core/Interface/features.api.h"
 
+// requred features
+#include "NewGame/Features/Map.h"
+
 namespace swexp::game::features
 {
     // standard api mapping
     //namespace core = swexp::core::api;
     using namespace swexp::core::api;
 
-    struct Map : Entity<Map> {
+    struct World : Entity<World> {
         struct State {
-            //TODO: consider integer vector2 form here
-            uint32_t width;
-            uint32_t height;
+            using Turn = uint32_t;
+
+            Map::Id map;
         };
         struct Logic final : BaseLogic {
-            static Id create(Context, const State&);
+            static void createMap(Context, const State&);
         };
 
         struct Emitters final : BaseEmitters {

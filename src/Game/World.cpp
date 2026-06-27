@@ -14,6 +14,7 @@ namespace sw::game
 
 	void World::createMap(const uint32_t width, const uint32_t height)
 	{
+		//dev: what to do on second call? Clamp units? Kill units? Let usint falling to Abyss?
 		_map = Map(width, height);
 		_events.event(_tick, io::MapCreated{width, height});
 	}
