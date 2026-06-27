@@ -5,6 +5,7 @@
 
 #include <format>
 #include <iostream>
+#include <optional>
 #include <sstream>
 
 int main(int, char**)
@@ -16,13 +17,14 @@ int main(int, char**)
 
     for (const auto& [name, scenario] : bucket)
     {
+        std::optional<tests::internals::CoutCapture> capture;
         try
         {
             using namespace sw;
 
             swexp::core::interface::InjectedRandomDevice::init(0);
             EventSystem events;
-            game::World world(events);
+            game::Session world(events);
 
             io::CommandParser parser;
 
@@ -45,20 +47,18 @@ int main(int, char**)
                     });
             parser.add<io::March>([&world](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); });
 
-            tests::Strings grabbed;
+            capture.emplace();
+            auto input = tests::internals::serialise(scenario.commands);
+
+            parser.parse(input);
+
+            while (!world.isGameOver())
             {
-                tests::internals::CoutCapture capture;
-                auto input = tests::internals::serialise(scenario.commands);
-
-                parser.parse(input);
-
-                while (!world.isGameOver())
-                {
-                    world.step();
-                }
-
-                grabbed = capture.lines();
+                world.step();
             }
+
+            const tests::Strings grabbed = capture->lines();
+            capture.reset();
 
             const auto reports = tests::Usage::checkEqual(grabbed, scenario.expectations);
 
@@ -79,6 +79,13 @@ int main(int, char**)
         catch (std::exception& e)
         {
             std::cout << std::format(R"(CRITICAL: Scenario "{}": {})", name, e.what()) << std::endl;
+            if (capture)
+            {
+                for (const auto& line : capture->lines())
+                {
+                    std::cout << std::format("  {}", line) << std::endl;
+                }
+            }
             ++failedCount;
         }
     }

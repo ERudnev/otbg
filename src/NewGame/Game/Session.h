@@ -7,16 +7,17 @@ namespace sw
 	class EventSystem;
 }
 
+// TODO: this class will go to Core one day... it is loosing all game logic becoming just Dispatcher...
 namespace swexp::game
 {
 	// inject basic types:
 	using namespace ::swexp::game::types;
 
 	// Acts as Game interface to the IO and Events
-	class World
+	class Session
 	{
 	public:
-		explicit World(sw::EventSystem&);
+		explicit Session(sw::EventSystem&);
 
 		void createMap(uint32_t, uint32_t);
 
@@ -30,6 +31,15 @@ namespace swexp::game
 
 		void step();
 	private:
+		/* CLEANUP reminder:
+		Map _map;
+		EventSystem& _events;
+		std::vector<Unit> _units;
+		uint32_t _tick;
+		*/
+
+		sw::EventSystem& eventReceiver;
+
 
 	};
 }
