@@ -173,16 +173,36 @@ namespace tests
     {
         Strings mismatches;
 
-        const size_t maxCount = std::max(reports.size(), expectations.size());
-        for (size_t index = 0; index < maxCount; ++index)
-        {
-            const std::string actual = index < reports.size() ? reports[index] : "<missing>";
-            const std::string expected = index < expectations.size() ? expectations[index] : "<missing>";
+        std::vector<bool> matchedReports(reports.size(), false);
 
-            if (actual != expected)
+        for (const auto& expected : expectations)
+        {
+            const auto match = std::ranges::find_if(
+                    reports,
+                    [&expected, &matchedReports, &reports](const std::string& actual)
+                    {
+                        const size_t index = static_cast<size_t>(&actual - reports.data());
+                        return !matchedReports[index] && actual == expected;
+                    });
+
+            if (match == reports.end())
             {
                 std::ostringstream message;
-                message << "line " << index << ": expected [" << expected << "], got [" << actual << "]";
+                message << "missing expected event [" << expected << "]";
+                mismatches.push_back(message.str());
+                continue;
+            }
+
+            const size_t matchedIndex = static_cast<size_t>(&(*match) - reports.data());
+            matchedReports[matchedIndex] = true;
+        }
+
+        for (size_t index = 0; index < reports.size(); ++index)
+        {
+            if (!matchedReports[index])
+            {
+                std::ostringstream message;
+                message << "unexpected actual event [" << reports[index] << "]";
                 mismatches.push_back(message.str());
             }
         }

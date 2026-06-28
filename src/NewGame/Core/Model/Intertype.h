@@ -3,6 +3,7 @@
 #include "NewGame/Core/Model/_forwards.h"
 
 #include <functional>
+#include <string>
 #include <unordered_map>
 #include "NewGame/Core/References.h"
 #include "NewGame/Core/Meta/TypeId.h"
@@ -28,7 +29,7 @@ namespace swexp::core::model::intertype
             // TODO: if you need type dependency graph, put your data here..
             // like "std::vector<TypeId> requiredTypes"
 
-            const char* debugName;
+            meta::StaticTypeId debugName;
             std::function<ref<core::model::linear::Erased>()> makeZeroLine;
             std::function<ref<core::model::linear::Erased>(const core::model::linear::Erased&)> cloneLine;
         };
@@ -65,7 +66,7 @@ namespace swexp::core::model::intertype
             schema->types.emplace(
                 TypeId(typeid(Types)),
                 TypeInfo{
-                    .debugName = typeid(Types).name(),
+                    .debugName = core::meta::debugName<Types>(),
                     .makeZeroLine = &makeZeroLine<Types>,
                     .cloneLine = &cloneLine<Types>,
                 }),

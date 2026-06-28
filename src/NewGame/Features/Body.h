@@ -1,24 +1,21 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-
-// requred features
 #include "NewGame/Features/Map.h"
 
 namespace swexp::game::entity
 {
-    // standard api mapping
-    //namespace core = swexp::core::api;
     using namespace swexp::core::api;
 
-    struct World : Entity<World> {
-        struct State {
-            using Turn = uint32_t;
+    struct Body : Entity<Body> {
+        using HitPoints = uint32_t;
 
-            Map::Id map;
+        struct State {
+            Map::Position position;
+            HitPoints hitPoints;
         };
+
         struct Logic final : BaseLogic {
-            static void createMap(Context, const State&);
         };
 
         struct Emitters final : BaseEmitters {

@@ -4,7 +4,7 @@
 // TODO: convert Session to private-implemented to avoid of this includes
 #include "NewGame/Core/Model/Complex.h"
 // Logic layer
-#include "NewGame/Features/Types.h"
+#include "NewGame/Features/_types.exports.h"
 #include "NewGame/Features/World.h"
 
 namespace sw

@@ -11,7 +11,7 @@ namespace swexp::game
 	using namespace swexp::core::api;
 
 	inline Schema createSchema() {
-		using namespace entities;
+		using namespace entity;
 		return core::model::intertype::SchemaData::build<
 			World,
 			Map

@@ -2,15 +2,20 @@
 
 #include "NewGame/Core/Interface/features.api.h"
 
-namespace swexp::game::entities
+namespace swexp::game::entity
 {
     // standard api mapping
     //namespace core = swexp::core::api;
     using namespace swexp::core::api;
 
     struct Map : Entity<Map> {
+        struct Position
+        {
+            uint32_t x{0};
+            uint32_t y{0};
+        };
+
         struct State {
-            //TODO: consider integer vector2 form here
             uint32_t width;
             uint32_t height;
         };
