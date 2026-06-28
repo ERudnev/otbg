@@ -1,18 +1,17 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
+#include "NewGame/Logic/Entities/Unit.h"
 
-namespace swexp::game::entity
+#include <optional>
+
+namespace swexp::game::effect
 {
     using namespace swexp::core::api;
 
-    struct RangedAttack : Entity<RangedAttack> {
-        using Range = uint32_t;
-
+    struct OrderedToMove : Effect<OrderedToMove, entity::Unit> {
         struct State {
-            Range minRange{2};
-            Range maxRange;
-            uint32_t damage;
+            entity::Map::Position targetPosition;
         };
 
         struct Logic final : BaseLogic {

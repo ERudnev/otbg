@@ -1,18 +1,17 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Features/Map.h"
+#include "NewGame/Logic/Entities/Unit.h"
 
-#include <optional>
-
-namespace swexp::game::entity
+namespace swexp::game::ability
 {
     using namespace swexp::core::api;
 
-    struct Movement : Entity<Movement> {
+    struct MeleeAttack : Extension<MeleeAttack, entity::Unit> {
+        using Strength = uint32_t;
+
         struct State {
-            std::optional<Map::Position> targetPosition;
-            uint32_t stepDistance{1};
+            Strength strength;
         };
 
         struct Logic final : BaseLogic {

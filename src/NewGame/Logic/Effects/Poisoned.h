@@ -1,20 +1,19 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Features/Body.h"
+#include "NewGame/Logic/Entities/Unit.h"
 
-namespace swexp::game::entity
+namespace swexp::game::effect
 {
     using namespace swexp::core::api;
 
-    struct PoisonEffect : Entity<PoisonEffect> {
-        using Poison = uint32_t;
+    struct Poisoned : Effect<Poisoned, entity::Unit> {
+        using Damage = entity::Unit::HitPoints;
 
         struct State {
-            Body::Id applier;
-            Poison poison;
+            entity::Unit::Id applier;
+            Damage damageBudgetRemaining;
             uint32_t remainingTurns;
-            bool doublesOnRending{true};
         };
 
         struct Logic final : BaseLogic {

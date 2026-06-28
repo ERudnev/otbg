@@ -4,8 +4,8 @@
 // TODO: convert Session to private-implemented to avoid of this includes
 #include "NewGame/Core/Model/Complex.h"
 // Logic layer
-#include "NewGame/Features/_types.exports.h"
-#include "NewGame/Features/World.h"
+#include "NewGame/Logic/_types.exports.h"
+#include "NewGame/Logic/Entities/World.h"
 
 namespace sw
 {
@@ -49,7 +49,6 @@ namespace swexp::game
 		api::Schema schema;
 		//swexp::game::features::World world;
 		swexp::core::model::complex::State state;
-
-
+		swexp::game::entity::World::Id world;
 	};
 }

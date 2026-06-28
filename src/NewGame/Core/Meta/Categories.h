@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint> // TODO: remove
+#include <cstdint> // TODO: remove after Identifier<Meta> used
 
 namespace swexp::core::cetegory
 {
@@ -11,7 +11,6 @@ namespace swexp::core::cetegory
     public:
         using Id = uint32_t; // use non-alias later: Identifier<Meta>;
 
-    protected:
         struct BaseLogic {
         };
 
@@ -20,15 +19,29 @@ namespace swexp::core::cetegory
     };
 
     template<typename Meta, typename Parent>
-    class Extension : Entity<Meta> {
+    class Extension : protected Entity<Meta> {
     public:
         using Id = typename Parent::Id;
 
-    protected:
         struct BaseLogic : Parent::BaseLogic {
         };
 
         struct BaseEmitters : Parent::BaseEmitters {
         };
     };
+
+    // TODO: adding BaseLogic rules and make Effect not similar to Extension
+    template<typename Meta, typename Parent>
+    class Effect : protected Entity<Meta> {
+    public:
+        using Id = typename Parent::Id;
+
+        struct BaseLogic : Parent::BaseLogic {
+        };
+
+        struct BaseEmitters : Parent::BaseEmitters {
+        };
+    };
+
+
 }

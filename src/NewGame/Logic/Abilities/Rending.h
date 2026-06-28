@@ -1,18 +1,19 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
+#include "NewGame/Logic/Entities/Unit.h"
 
-namespace swexp::game::entity
+namespace swexp::game::ability
 {
     using namespace swexp::core::api;
 
-    struct RendingAbility : Entity<RendingAbility> {
+    struct Rending : Extension<Rending, entity::Unit> {
         using Chance = uint32_t;
-        using Rending = uint32_t;
+        using Damage = entity::Unit::HitPoints;
 
         struct State {
             Chance chance;
-            Rending rending;
+            Damage damage;
         };
 
         struct Logic final : BaseLogic {
