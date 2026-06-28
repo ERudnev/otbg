@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Map.h"
+#include "NewGame/Game/Entities/Map.h"
 
 namespace swexp::game::entity
 {
@@ -15,7 +15,7 @@ namespace swexp::game::entity
             HitPoints hitPoints;
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
             // replacement of original sw::game::Map::_positionByUnitId
             static auto findOccupying(Reading, Map::Position)->Id;
         };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Unit.h"
+#include "NewGame/Game/Entities/Unit.h"
 
 #include <optional>
 
@@ -14,7 +14,7 @@ namespace swexp::game::effect
             entity::Map::Position targetPosition;
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
         };
 
         struct Emitters final : BaseEmitters {

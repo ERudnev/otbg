@@ -24,7 +24,7 @@ int main(int, char**)
 
             swexp::core::interface::InjectedRandomDevice::init(0);
             EventSystem events;
-            game::Session world(events);
+            game::World world(events);
 
             io::CommandParser parser;
 
@@ -32,13 +32,13 @@ int main(int, char**)
             parser.add<io::SpawnSwordsman>(
                     [&world](auto command)
                     {
-                        world.spawnUnit(
+                        world.spawnSwordsman(
                                 command.unitId,
-                                {command.x, command.y},
-                                command.hp,
-                                command.strength,
-                                command.chance,
-                                command.rending);
+                                game::composition::Swordsman::Actions::SpawnParameters{
+                                        .position = {command.x, command.y},
+                                        .melee = {.strength = command.strength},
+                                        .rending = {.chance = command.chance, .damage = command.rending},
+                                });
                     });
             parser.add<io::SpawnHunter>(
                     [](auto command)
@@ -78,14 +78,14 @@ int main(int, char**)
         }
         catch (std::exception& e)
         {
-            std::cout << std::format(R"(CRITICAL: Scenario "{}": {})", name, e.what()) << std::endl;
-            if (capture)
-            {
-                for (const auto& line : capture->lines())
-                {
-                    std::cout << std::format("  {}", line) << std::endl;
-                }
+            tests::Strings captured;
+            if (capture) {
+                captured = capture->lines();
+                capture.reset();  // вернуть cout из buffer
             }
+            std::cout << std::format(R"(CRITICAL: Scenario "{}": {})", name, e.what()) << '\n';
+            for (const auto& line : captured)
+                std::cout << "  " << line << '\n';
             ++failedCount;
         }
     }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Unit.h"
+#include "NewGame/Game/Entities/Unit.h"
 
 namespace swexp::game::effect
 {
@@ -16,7 +16,7 @@ namespace swexp::game::effect
             uint32_t remainingTurns;
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
         };
 
         struct Emitters final : BaseEmitters {

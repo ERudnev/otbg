@@ -21,7 +21,7 @@ namespace swexp::game::entity
             uint32_t width;
             uint32_t height;
         };
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
             static auto create(Writing, const State&)->Id;
         };
 

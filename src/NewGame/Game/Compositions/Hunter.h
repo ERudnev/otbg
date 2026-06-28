@@ -1,11 +1,11 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Unit.h"
-#include "NewGame/Logic/Abilities/LandMovement.h"
-#include "NewGame/Logic/Abilities/MeleeAttack.h"
-#include "NewGame/Logic/Abilities/RangedAttack.h"
-#include "NewGame/Logic/Abilities/PoisonArrows.h"
+#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Game/Abilities/LandMovement.h"
+#include "NewGame/Game/Abilities/MeleeAttack.h"
+#include "NewGame/Game/Abilities/RangedAttack.h"
+#include "NewGame/Game/Abilities/PoisonArrows.h"
 
 namespace swexp::game::composition
 {
@@ -16,7 +16,7 @@ namespace swexp::game::composition
             // TODO: add ability control state here. For example cooldowns, disruptions, e.t.c
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
         };
 
         struct Emitters final : BaseEmitters {

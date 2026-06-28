@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cstdint> // TODO: remove after Identifier<Meta> used
-#include "NewGame/Core/Logic/_forwards.h"
+#include "NewGame/Core/Operations/_forwards.h"
 
 // temp:
 #include "NewGame/Core/Meta/Alias.h"
-#include "NewGame/Core/Logic/ContextData.h"
+#include "NewGame/Core/Operations/ContextData.h"
 #include "NewGame/Core/Model/Complex.h"
 
 
@@ -14,13 +14,12 @@ namespace swexp::core::cetegory
     // This is collapsed "State/Operations/Normalizators/Commands/Emitters" Meta-class
     // See documentation for details
     template<typename Meta>
-    class Entity {
-    public:
+    struct Entity {
         // TODO: disable default c-tor for this one.
         // TODO: use non-alias type generator like EnTT Identifier<Meta>
         using Id = uint32_t;
 
-        struct BaseLogic {
+        struct BaseActions {
             // injecting to operations signatures to allow
             // "Foo::Logic::getValue(Reading, Id)->Foo::Property"
             using Reading = ::swexp::core::operations::ReadingContext;
@@ -31,6 +30,9 @@ namespace swexp::core::cetegory
             static meta::Item<Meta>& Get(Writing context, Id id) { return context.state.line<Meta>().elements.at(id); }
         };
 
+        struct BaseReactions {
+        };
+
         struct BaseEmitters {
             // TODO: rename
             using Analysis = ::swexp::core::operations::AnalyticContext;
@@ -38,29 +40,34 @@ namespace swexp::core::cetegory
     };
 
     template<typename Meta, typename Parent>
-    class Extension : protected Entity<Meta> {
-    public:
+    struct Extension : protected Entity<Meta> {
         using Id = typename Parent::Id;
 
-        struct BaseLogic : Parent::BaseLogic {
+        struct BaseActions : Entity<Meta>::BaseActions {
         };
 
-        struct BaseEmitters : Parent::BaseEmitters {
+        struct BaseReactions : Entity<Meta>::BaseReactions {
+        };
+
+        struct BaseEmitters : Entity<Meta>::BaseEmitters {
         };
     };
 
-    // TODO: adding BaseLogic rules and make Effect not similar to Extension
+    // TODO: adding BaseActions rules and make Effect not similar to Extension
     template<typename Meta, typename Parent>
-    class Effect : protected Entity<Meta> {
-    public:
+    struct Effect : protected Entity<Meta> {
         using Id = typename Parent::Id;
 
-        struct BaseLogic : Parent::BaseLogic {
+        struct BaseActions : Entity<Meta>::BaseActions {
         };
 
-        struct BaseEmitters : Parent::BaseEmitters {
+        struct BaseEmitters : Entity<Meta>::BaseEmitters {
         };
     };
+
+    // TODO: create Composition rules for this Category
+    template<typename Meta, typename AnchorEntity>
+    using Composition = Extension<Meta, AnchorEntity>;
 
 
 }

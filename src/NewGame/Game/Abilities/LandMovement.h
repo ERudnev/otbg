@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Unit.h"
+#include "NewGame/Game/Entities/Unit.h"
 
 namespace swexp::game::ability
 {
@@ -15,7 +15,7 @@ namespace swexp::game::ability
             // this will allow effects-on-abilities transapent to abilitity logic
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
         };
 
         struct Emitters final : BaseEmitters {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Logic/Entities/Unit.h"
+#include "NewGame/Game/Entities/Unit.h"
 
 namespace swexp::game::ability
 {
@@ -16,7 +16,7 @@ namespace swexp::game::ability
             uint32_t damage;
         };
 
-        struct Logic final : BaseLogic {
+        struct Actions final : BaseActions {
         };
 
         struct Emitters final : BaseEmitters {
