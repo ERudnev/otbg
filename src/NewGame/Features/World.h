@@ -5,7 +5,7 @@
 // requred features
 #include "NewGame/Features/Map.h"
 
-namespace swexp::game::features
+namespace swexp::game::entities
 {
     // standard api mapping
     //namespace core = swexp::core::api;

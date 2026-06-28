@@ -1,10 +1,11 @@
 #pragma once
 
-#include "NewGame/Game/Types.h"
-#include "NewGame/Game/World.h"
 #include "NewGame/Core/Interface/features.api.h"
 // TODO: convert Session to private-implemented to avoid of this includes
 #include "NewGame/Core/Model/Complex.h"
+// Logic layer
+#include "NewGame/Features/Types.h"
+#include "NewGame/Features/World.h"
 
 namespace sw
 {
@@ -46,7 +47,7 @@ namespace swexp::game
 		sw::EventSystem& eventReceiver;
 		// TODO: use private declaration to avoid api includes
 		api::Schema schema;
-		swexp::game::features::World world;
+		//swexp::game::features::World world;
 		swexp::core::model::complex::State state;
 
 

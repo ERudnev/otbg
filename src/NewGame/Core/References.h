@@ -2,6 +2,9 @@
 
 #include <memory>
 
+// TODO: remove this include on project release
+#include "NewGame/Core/Interface/macros.h"
+
 namespace swexp::core
 {
     // NOTE: this using is made for futore replacement with non-nullable "shared_reference"

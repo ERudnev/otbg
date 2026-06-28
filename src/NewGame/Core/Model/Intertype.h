@@ -12,16 +12,25 @@ namespace swexp::core::model::intertype
 
     struct Composition {
         // NB: vector<pair<>> works faster here...
-        std::unordered_map<TypeId, ref<core::model::linear::Erased>> lines;
+        using Lines = std::unordered_map<TypeId, ref<core::model::linear::Erased>>;
+
+        Composition(Schema schema) : schema(schema) {}
+
+        const model::Schema schema;
+        Lines lines;
     };
 
     struct SchemaData {
         struct TypeInfo {
+            // TODO: if you need type dependency graph, put your data here..
+            // like "std::vector<TypeId> requiredTypes"
+
+            // add type-restored bindings here:
         };
 
         std::unordered_map<TypeId, TypeInfo> types;
 
-        // helper:
+        // syntax sugar:
         template<typename ...Types> // variadic
         static cref<SchemaData> build();
     };
@@ -29,5 +38,10 @@ namespace swexp::core::model::intertype
 
 namespace swexp::core::model::intertype
 {
+    template<typename ...Types> // variadic
+    cref<SchemaData> SchemaData::build()
+    {
+        _INCOMPLETE_;
+    }
 
 }

@@ -1,12 +1,28 @@
 #include "Session.h"
 
+#include "Core/Model/Intertype.h"
 #include "IO/interface.include.h"
 #include "NewGame/Core/Interface/macros.h"
 
 namespace swexp::game
 {
+
+	// priate Schema init:
+	using namespace swexp::core::api;
+
+	inline Schema createSchema() {
+		using namespace entities;
+		return core::model::intertype::SchemaData::build<
+			World,
+			Map
+		>();
+	}
+
+
 	Session::Session(sw::EventSystem& events)
 		: eventReceiver(events)
+		, schema(createSchema())
+		, state(schema)
 	{
 		_INCOMPLETE_;
 	}

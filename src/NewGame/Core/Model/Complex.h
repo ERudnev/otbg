@@ -1,5 +1,6 @@
 #pragma once
 
+#include "NewGame/Core/Model/_forwards.h"
 #include "NewGame/Core/Model/Linear.h"
 #include "NewGame/Core/Model/Intertype.h"
 
@@ -8,13 +9,17 @@
 namespace swexp::core::model::complex
 {
     struct State : protected intertype::Composition {
+        State(Schema schema) : intertype::Composition(schema) {
+            fillZeroState();
+        }
 
         template<typename Meta>
         const linear::State<Meta>& elements() const;
 
         template<typename Meta>
         linear::State<Meta>& elements();
-
+    private:
+        void fillZeroState();
     };
 }
 
