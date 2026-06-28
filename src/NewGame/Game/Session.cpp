@@ -4,6 +4,22 @@
 #include "IO/interface.include.h"
 #include "NewGame/Core/Interface/macros.h"
 
+// TODO: moe to dedicated "my schema" file...
+// To build Schema
+#include "NewGame/Logic/Abilities/LandMovement.h"
+#include "NewGame/Logic/Abilities/MeleeAttack.h"
+#include "NewGame/Logic/Abilities/PoisonArrows.h"
+#include "NewGame/Logic/Abilities/RangedAttack.h"
+#include "NewGame/Logic/Abilities/Rending.h"
+#include "NewGame/Logic/Compositions/Hunter.h"
+#include "NewGame/Logic/Compositions/Swordsman.h"
+#include "NewGame/Logic/Effects/OrderedToMove.h"
+#include "NewGame/Logic/Effects/Poisoned.h"
+#include "NewGame/Logic/Effects/Rended.h"
+#include "NewGame/Logic/Entities/Map.h"
+#include "NewGame/Logic/Entities/Unit.h"
+#include "NewGame/Logic/Entities/World.h"
+
 namespace swexp::game
 {
 
@@ -11,10 +27,20 @@ namespace swexp::game
 	using namespace swexp::core::api;
 
 	inline Schema createSchema() {
-		using namespace entity;
 		return core::model::intertype::SchemaData::build<
-			World,
-			Map
+			entity::World,
+			entity::Map,
+			entity::Unit,
+			ability::LandMovement,
+			ability::MeleeAttack,
+			ability::RangedAttack,
+			ability::Rending,
+			ability::PoisonArrows,
+			composition::Swordsman,
+			composition::Hunter,
+			effect::Poisoned,
+			effect::OrderedToMove,
+			effect::Rended
 		>();
 	}
 
@@ -23,6 +49,7 @@ namespace swexp::game
 		: eventReceiver(events)
 		, schema(createSchema())
 		, state(schema)
+		, world(-1) // fill below
 	{
 		_INCOMPLETE_;
 	}

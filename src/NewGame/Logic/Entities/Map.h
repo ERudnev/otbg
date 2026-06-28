@@ -9,6 +9,7 @@ namespace swexp::game::entity
     //namespace core = swexp::core::api;
     using namespace swexp::core::api;
 
+    // NB: only Space, does not know about occupancy. See entity::Body for occupancy map
     struct Map : Entity<Map> {
         struct Position
         {
@@ -21,7 +22,7 @@ namespace swexp::game::entity
             uint32_t height;
         };
         struct Logic final : BaseLogic {
-            static Id create(Context, const State&);
+            static auto create(Writing, const State&)->Id;
         };
 
         struct Emitters final : BaseEmitters {

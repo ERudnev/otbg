@@ -13,3 +13,8 @@ namespace swexp::core::model
 {
     using Schema = cref<::swexp::core::model::intertype::SchemaData>;
 }
+
+namespace swexp::core::model::complex
+{
+    struct State;
+}

@@ -20,6 +20,4 @@ namespace swexp::core::api {
     template<typename Meta, typename Parent>
     using Effect = ::swexp::core::cetegory::Effect<Meta, Parent>;
 
-    // Context for operations (reference):
-    using Context = ::swexp::core::operations::Context;
 }

@@ -16,6 +16,8 @@ namespace swexp::game::entity
         };
 
         struct Logic final : BaseLogic {
+            // replacement of original sw::game::Map::_positionByUnitId
+            static auto findOccupying(Reading, Map::Position)->Id;
         };
 
         struct Emitters final : BaseEmitters {

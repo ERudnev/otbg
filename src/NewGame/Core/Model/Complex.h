@@ -13,10 +13,10 @@ namespace swexp::core::model::complex
         State(const State& other);
 
         template<typename Meta>
-        const linear::State<Meta>& elements() const;
+        const linear::State<Meta>& line() const;
 
         template<typename Meta>
-        linear::State<Meta>& elements();
+        linear::State<Meta>& line();
     private:
         void fillZeroState();
     };
@@ -26,7 +26,7 @@ namespace swexp::core::model::complex
 namespace swexp::core::model::complex
 {
     template<typename Meta>
-    const linear::State<Meta>& State::elements() const
+    const linear::State<Meta>& State::line() const
     {
         const auto iterator = lines.find(typeid(Meta));
         if (iterator == lines.end())
@@ -44,7 +44,7 @@ namespace swexp::core::model::complex
     }
 
     template<typename Meta>
-    linear::State<Meta>& State::elements()
+    linear::State<Meta>& State::line()
     {
         const auto iterator = lines.find(typeid(Meta));
         if (iterator == lines.end())
