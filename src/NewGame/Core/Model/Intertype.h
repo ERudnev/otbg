@@ -1,5 +1,8 @@
 #pragma once
 
+#include "NewGame/Core/Model/_forwards.h"
+
+#include <functional>
 #include <unordered_map>
 #include "NewGame/Core/References.h"
 #include "NewGame/Core/Meta/TypeId.h"
@@ -25,7 +28,9 @@ namespace swexp::core::model::intertype
             // TODO: if you need type dependency graph, put your data here..
             // like "std::vector<TypeId> requiredTypes"
 
-            // add type-restored bindings here:
+            const char* debugName;
+            std::function<ref<core::model::linear::Erased>()> makeZeroLine;
+            std::function<ref<core::model::linear::Erased>(const core::model::linear::Erased&)> cloneLine;
         };
 
         std::unordered_map<TypeId, TypeInfo> types;
@@ -38,10 +43,35 @@ namespace swexp::core::model::intertype
 
 namespace swexp::core::model::intertype
 {
+    template<typename Meta>
+    ref<core::model::linear::Erased> makeZeroLine()
+    {
+        return std::make_shared<core::model::linear::State<Meta>>();
+    }
+
+    template<typename Meta>
+    ref<core::model::linear::Erased> cloneLine(const core::model::linear::Erased& erased)
+    {
+        const auto& typed = dynamic_cast<const core::model::linear::State<Meta>&>(erased);
+        return std::make_shared<core::model::linear::State<Meta>>(typed);
+    }
+
     template<typename ...Types> // variadic
     cref<SchemaData> SchemaData::build()
     {
-        _INCOMPLETE_;
+        auto schema = std::make_shared<SchemaData>();
+
+        (
+            schema->types.emplace(
+                TypeId(typeid(Types)),
+                TypeInfo{
+                    .debugName = typeid(Types).name(),
+                    .makeZeroLine = &makeZeroLine<Types>,
+                    .cloneLine = &cloneLine<Types>,
+                }),
+            ...);
+
+        return schema;
     }
 
 }

@@ -11,7 +11,7 @@ namespace swexp::core::model::linear
 
     // required to put into erased complex container as one of "lines"
     struct Erased {
-        virtual ~Erased();
+        virtual ~Erased() = default;
     };
 
     // TODO: use concepts here

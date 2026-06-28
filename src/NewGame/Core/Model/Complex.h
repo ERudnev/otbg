@@ -9,9 +9,8 @@
 namespace swexp::core::model::complex
 {
     struct State : protected intertype::Composition {
-        State(Schema schema) : intertype::Composition(schema) {
-            fillZeroState();
-        }
+        State(Schema schema);
+        State(const State& other);
 
         template<typename Meta>
         const linear::State<Meta>& elements() const;
