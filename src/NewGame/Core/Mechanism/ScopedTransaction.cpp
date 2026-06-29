@@ -9,7 +9,7 @@ namespace swexp::core::mechanism
     void ScopedTransaction::finish()
     {
         // call all normalization for (state->collected)
-        // scan changes for events (use Entity::Emitter lists)
+        StateProcessing::emitEvents(state, collected, receiver);
         // emit found Enents
     }
 }

@@ -13,6 +13,8 @@ namespace swexp::game::composition
 
     struct Swordsman : Composition<Swordsman, entity::Unit> {
         struct State {
+            // placeholder
+            //std::string name;
             // TODO: cleanup this comments before release
 
             // not needed: eing Extension of Unit has own Id value == Unit' Id value

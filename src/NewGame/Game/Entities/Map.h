@@ -20,12 +20,16 @@ namespace swexp::game::entity
         struct State {
             uint32_t width;
             uint32_t height;
+
+            friend bool operator==(const State&, const State&) = default;
         };
         struct Actions final : BaseActions {
             static auto spawn(Writing, const State&)->Id;
         };
 
         struct Emitters final : BaseEmitters {
+            static void _generated_call_all(Emitting emitting);
+            static void mapCreated(Emitting emitting);
         };
     };
 }

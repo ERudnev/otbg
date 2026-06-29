@@ -12,6 +12,8 @@ namespace swexp::core::model::complex
         State(Schema schema);
         State(const State& other);
 
+        Schema getSchema() const { return schema; }
+
         template<typename Meta>
         const linear::State<Meta>& line() const;
 

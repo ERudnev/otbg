@@ -13,9 +13,18 @@ namespace swexp::core::mechanism
     StateProcessing::EmittersSummary StateProcessing::emitEvents(
         const State& begin, const State& end, sw::EventSystem& listener)
     {
-        (void)begin;
-        (void)end;
-        (void)listener;
-        _INCOMPLETE_;
+        EmittersSummary result;
+
+        const auto schema = end.getSchema();
+        for (const auto& [_, type] : schema->types)
+        {
+            if (!type.callEmitters)
+                continue;
+
+            type.callEmitters(begin, end, listener);
+            ++result.eventsOccur;
+        }
+
+        return result;
     }
 }

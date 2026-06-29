@@ -27,9 +27,10 @@ namespace swexp::core::operations
     };
 
     struct ContextEmittersData {
-        const ContextWritingData updated;
+        const ContextReadingData initial;
+        const ContextReadingData updated;
         sw::EventSystem& listener;
 
-        operator ContextReadingData() const { return {updated.state}; }
+        operator ContextReadingData() const { return updated; }
     };
 }

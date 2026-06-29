@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint> // TODO: remove after Identifier<Meta> used
+#include <functional>
 #include "NewGame/Core/Operations/_forwards.h"
 
 // temp:
@@ -36,6 +37,7 @@ namespace swexp::core::cetegory
 
         struct BaseEmitters {
             using Emitting = api::context::Emitting;
+            using CallAllFunction = std::function<void(Emitting)>;
         };
     };
 
