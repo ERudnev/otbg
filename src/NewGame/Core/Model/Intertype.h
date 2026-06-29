@@ -40,7 +40,7 @@ namespace swexp::core::model::intertype
             std::function<ref<core::model::linear::Erased>()> makeZeroLine;
             std::function<ref<core::model::linear::Erased>(const core::model::linear::Erased&)> cloneLine;
             std::function<void(const ComplexState&, const ComplexState&, sw::EventSystem&)> callEmitters;
-            std::function<void(const ComplexState&, const ComplexState&, ComplexState&)> callReactions;
+            std::function<size_t(const ComplexState&, const ComplexState&, ComplexState&)> callReactions;
         };
 
         std::unordered_map<TypeId, TypeInfo> types;
@@ -53,6 +53,28 @@ namespace swexp::core::model::intertype
 
 namespace swexp::core::model::intertype
 {
+    template<typename Meta>
+    auto makeCallReactions()
+    {
+        using CallReactionsFn = std::function<size_t(
+            const core::model::complex::State&,
+            const core::model::complex::State&,
+            core::model::complex::State&)>;
+
+        return CallReactionsFn{
+            [](
+                const core::model::complex::State& initial,
+                const core::model::complex::State& updated,
+                core::model::complex::State& adjustments)
+            {
+                return Meta::Reactions::_generated_call_all(core::operations::ContextReactionsData{
+                    core::operations::ContextReadingData{initial},
+                    core::operations::ContextWritingData{const_cast<core::model::complex::State&>(updated)},
+                    adjustments,
+                });
+            }};
+    }
+
     template<typename Meta>
     auto makeCallEmitters()
     {
@@ -101,6 +123,7 @@ namespace swexp::core::model::intertype
                     .makeZeroLine = &makeZeroLine<Types>,
                     .cloneLine = &cloneLine<Types>,
                     .callEmitters = makeCallEmitters<Types>(),
+                    .callReactions = makeCallReactions<Types>(),
                 }),
             ...);
 

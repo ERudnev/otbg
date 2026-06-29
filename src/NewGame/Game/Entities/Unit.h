@@ -22,6 +22,10 @@ namespace swexp::game::entity
             static auto findOccupying(Reading, Map::Position)->Id;
         };
 
+        struct Reactions final : BaseReactions {
+            static Summary _generated_call_all(Reacting) { return 0; }
+        };
+
         struct Emitters final : BaseEmitters {
             static void _generated_call_all(Emitting) {}
         };

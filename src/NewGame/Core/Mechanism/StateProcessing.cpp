@@ -5,15 +5,31 @@
 
 namespace swexp::core::mechanism
 {
-    StateProcessing::NormalizationSummary StateProcessing::normalize(const State& initial, const State& updated, State& reactions)
+    StateProcessing::NormalizationSummary StateProcessing::normalize(
+        const StateProcessing::State& initial,
+        const StateProcessing::State& updated,
+        StateProcessing::State& reactions)
     {
-        _LOG_DEBUG_("skipped");
+        NormalizationSummary result = 0;
+
+        const auto schema = updated.getSchema();
+        for (const auto& [_, type] : schema->types)
+        {
+            if (!type.callReactions)
+                continue;
+
+            result += type.callReactions(initial, updated, reactions);
+        }
+
+        return result;
     }
 
     StateProcessing::EmittersSummary StateProcessing::emitEvents(
-        const State& begin, const State& end, sw::EventSystem& listener)
+        const StateProcessing::State& begin,
+        const StateProcessing::State& end,
+        sw::EventSystem& listener)
     {
-        EmittersSummary result;
+        EmittersSummary result = 0;
 
         const auto schema = end.getSchema();
         for (const auto& [_, type] : schema->types)
@@ -22,7 +38,7 @@ namespace swexp::core::mechanism
                 continue;
 
             type.callEmitters(begin, end, listener);
-            ++result.eventsOccur;
+            ++result;
         }
 
         return result;

@@ -11,6 +11,7 @@ namespace swexp::core::operations
         const model::complex::State& state;
     };
 
+    // This is basic implementation. Switch to StateView{const State&, Patch&} ECS-style
     struct ContextWritingData {
         model::complex::State& state;
 

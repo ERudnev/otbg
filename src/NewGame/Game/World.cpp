@@ -21,6 +21,7 @@
 #include "NewGame/Game/Entities/Map.h"
 #include "NewGame/Game/Entities/Unit.h"
 #include <memory>
+#include <stdexcept>
 
 
 namespace swexp::game
@@ -85,8 +86,18 @@ namespace swexp::game
 
 	bool World::isGameOver() const
 	{
-		_INCOMPLETE_;
-		return true;
+		// debug-mode exit:
+		if (currentTurn > 1000)
+		{
+			//throw std::logic_error("world is too old, something gone wrong");
+			std::cout << "world looks hanged (1000 turns passed)" << std::endl;
+			return true;
+		}
+
+		// this implementation makes experimental model equal to initial test assignment model
+		// better add other "end game" criteria, or we will kill the world only because of
+		// all units taking rest :)
+		return state.line<effect::OrderedToMove>().elements.empty();
 	}
 
 	void World::step()

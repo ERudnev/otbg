@@ -21,13 +21,14 @@ namespace swexp::game::effect
         };
 
         struct Reactions final : BaseReactions {
-            static void _generated_call_all(Reacting);
-            static void finishedMarchRemoved(Reacting);
+            static Summary _generated_call_all(Reacting);
+            static Summary finishedMarchRemoved(Reacting);
         };
 
         struct Emitters final : BaseEmitters {
             static void _generated_call_all(Emitting);
             static void marchStarted(Emitting);
+            static void marchEnded(Emitting);
         };
     };
 }

@@ -29,7 +29,7 @@ namespace swexp::game::composition
         };
 
         struct Reactions final : BaseReactions {
-
+            static Summary _generated_call_all(Reacting) { return 0; }
         };
 
         struct Emitters final : BaseEmitters {

@@ -18,6 +18,10 @@ namespace swexp::game::effect
         struct Actions final : BaseActions {
         };
 
+        struct Reactions final : BaseReactions {
+            static Summary _generated_call_all(Reacting) { return 0; }
+        };
+
         struct Emitters final : BaseEmitters {
             static void _generated_call_all(Emitting) {}
         };

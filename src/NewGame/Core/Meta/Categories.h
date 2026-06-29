@@ -1,12 +1,14 @@
 #pragma once
 
 #include <cstdint> // TODO: remove after Identifier<Meta> used
+#include <cstddef>
 #include <functional>
 #include "NewGame/Core/Operations/_forwards.h"
 
 // temp:
 #include "NewGame/Core/Meta/Alias.h"
 #include "NewGame/Core/Operations/ContextData.h"
+#include "NewGame/Core/Operations/Normalization/Component.h"
 #include "NewGame/Core/Model/Complex.h"
 
 
@@ -33,6 +35,7 @@ namespace swexp::core::cetegory
 
         struct BaseReactions {
             using Reacting = api::context::Reacting;
+            using Summary = size_t;
         };
 
         struct BaseEmitters {
@@ -49,6 +52,13 @@ namespace swexp::core::cetegory
         };
 
         struct BaseReactions : Entity<Meta>::BaseReactions {
+            using Reacting = typename Entity<Meta>::BaseReactions::Reacting;
+            using Summary = typename Entity<Meta>::BaseReactions::Summary;
+        protected:
+            static Summary _category_default_reactions(Reacting context)
+            {
+                return normalization::deleteWithParent<Meta, Parent>(context);
+            }
         };
 
         struct BaseEmitters : Entity<Meta>::BaseEmitters {
@@ -61,6 +71,16 @@ namespace swexp::core::cetegory
         using Id = typename Parent::Id;
 
         struct BaseActions : Entity<Meta>::BaseActions {
+        };
+
+        struct BaseReactions : Entity<Meta>::BaseReactions {
+            using Reacting = typename Entity<Meta>::BaseReactions::Reacting;
+            using Summary = typename Entity<Meta>::BaseReactions::Summary;
+        protected:
+            static Summary _category_default_reactions(Reacting context)
+            {
+                return normalization::deleteWithParent<Meta, Parent>(context);
+            }
         };
 
         struct BaseEmitters : Entity<Meta>::BaseEmitters {
