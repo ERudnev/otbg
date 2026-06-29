@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "NewGame/Core/Interface/features.api.h"
 #include "NewGame/Game/Entities/Map.h"
 
@@ -9,15 +11,18 @@ namespace swexp::game::entity
 
     struct Unit : Entity<Unit> {
         using HitPoints = uint32_t;
+        using TurnStrategy = std::function<bool(core::api::context::Writing, Id)>;
 
         struct State {
             Map::Position position;
             HitPoints hitPoints;
+            TurnStrategy turnStrategy;
         };
 
         struct Actions final : BaseActions {
             // replacement of original sw::game::Map::_positionByUnitId
             static auto findOccupying(Reading, Map::Position)->Id;
+            static bool makeTurn(Writing, Id); // returns "turn was spent"; false means idle
         };
 
         struct Reactions final : BaseReactions {

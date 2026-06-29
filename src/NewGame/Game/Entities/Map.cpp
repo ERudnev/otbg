@@ -69,7 +69,7 @@ namespace swexp::game::entity
         else if (targetPosition.y > currentPosition.y)
             nextPosition.y += 1;
 
-        if (!isPositionFree(reading, mapId, nextPosition))
+        if (not isPositionFree(reading, mapId, nextPosition))
             return false;
 
         outPosition = nextPosition;

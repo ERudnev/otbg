@@ -8,6 +8,7 @@
 #include "NewGame/Game/Abilities/LandMovement.h"
 #include "NewGame/Game/Abilities/MeleeAttack.h"
 #include "NewGame/Game/Abilities/Rending.h"
+#include "NewGame/Game/Effects/OrderedToMove.h"
 #include "NewGame/Game/Entities/Unit.h"
 
 namespace swexp::game::composition
@@ -19,8 +20,14 @@ namespace swexp::game::composition
         auto& draft = writing.state;
 
         const entity::Unit::Id unitId = parameters.externalId;
-        const auto [_, inserted] = draft.line<entity::Unit>().elements.try_emplace(unitId, entity::Unit::State{parameters.unit});
-        if (!inserted)
+        const auto [_, inserted] = draft.line<entity::Unit>().elements.try_emplace(
+            unitId,
+            entity::Unit::State{
+                .position = parameters.position,
+                .hitPoints = parameters.hitPoints,
+                .turnStrategy = &makeTurn,
+            });
+        if (not inserted)
             throw std::logic_error("Swordsman::Actions::spawn: duplicate unit id");
 
         draft.line<ability::LandMovement>().createComponent<entity::Unit>(unitId, {});
@@ -34,6 +41,59 @@ namespace swexp::game::composition
             unitId, State{.name = std::format("Swordsman#{}", swordsmanNumber)});
 
         return unitId;
+    }
+
+    bool Swordsman::Actions::makeTurn(Writing writing, Id id)
+    {
+        // Runtime shortcut: current prototype assumes the newest map is the active battlefield.
+        const auto& maps = writing.state.line<entity::Map>().elements;
+        if (maps.empty())
+            return false;
+
+        entity::Map::Id mapId = maps.begin()->first;
+        for (const auto& [candidateId, _] : maps)
+        {
+            if (candidateId > mapId)
+                mapId = candidateId;
+        }
+
+        auto unit = ask::try_get<entity::Unit>(writing, id);
+
+        // Swordsman policy matches the reference world: attack adjacent live targets before moving.
+        std::vector<uint32_t> targetUnitIds;
+        entity::Map::Actions::findTargets(writing, mapId, id, unit->get().position, targetUnitIds);
+
+        for (const auto targetUnitId : targetUnitIds)
+        {
+            auto target = ask::try_get<entity::Unit>(writing, targetUnitId);
+            if (not target or target->get().hitPoints == 0)
+                continue;
+
+            if (not ability::Rending::Actions::tryApply(writing, id, targetUnitId))
+                ability::MeleeAttack::Actions::attack(writing, id, targetUnitId);
+
+            target = ask::try_get<entity::Unit>(writing, targetUnitId);
+            if (target and target->get().hitPoints == 0)
+                writing.state.line<entity::Unit>().elements.erase(targetUnitId);
+
+            return true;
+        }
+
+        // No adjacent target: try to advance along the current move order.
+        auto order = ask::try_get<effect::OrderedToMove>(writing, id);
+        if (not order)
+            return false;
+
+        const auto targetPosition = order->get().targetPosition;
+        entity::Map::Position nextPosition;
+        if (entity::Map::Actions::tryGetNextPosition(writing, mapId, unit->get().position, targetPosition, nextPosition))
+            unit->get().position = nextPosition;
+
+        if (unit->get().position == targetPosition)
+            writing.state.line<effect::OrderedToMove>().elements.erase(id);
+
+        // Order existed, so the unit spent its turn even if the step was blocked.
+        return true;
     }
 
     void Swordsman::Emitters::_generated_call_all(Emitting emitting)

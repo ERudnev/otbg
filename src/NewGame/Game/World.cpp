@@ -103,6 +103,19 @@ namespace swexp::game
 
 	void World::step()
 	{
-		_INCOMPLETE_;
+		++currentTurn;
+
+		// Phase 1: open transaction for the whole world tick.
+		Transaction tx(state, eventReceiver);
+
+		// Phase 2: let every registered unit spend its own turn strategy.
+		// The world is responsible only for the order of dispatch.
+		for (const auto unitId : registeredUnits)
+			with<entity::Unit>::makeTurn(tx, unitId);
+
+		// Phase 3: later this is a good place for world-owned post-processing.
+		// Examples: cleanup of dead references, global effects, turn-wide rules.
+
+		// Phase 4: transaction destructor will normalize state and emit events.
 	}
 }

@@ -23,11 +23,13 @@ namespace swexp::game::composition
         struct Actions final : BaseActions {
             struct SpawnParameters {
                 ::swexp::game::api::UnitId externalId;
-                entity::Unit::State unit;
+                entity::Map::Position position;
+                entity::Unit::HitPoints hitPoints;
                 ability::MeleeAttack::State melee;
                 ability::Rending::State rending;
             };
             static entity::Unit::Id spawn(Writing, const SpawnParameters&);
+            static bool makeTurn(Writing, Id); // NB: Swordsman::Id == Unit::Id; true means "turn was spent"
         };
 
         struct Reactions final : BaseReactions {
