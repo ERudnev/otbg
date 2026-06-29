@@ -9,6 +9,34 @@
 
 namespace tests
 {
+    Bucket Usage::generateNewScenarios()
+    {
+        return {
+            {"hunter_keeps_distance", Scenario{
+                .commands = {
+                    "CREATE_MAP 10 10",
+                    "SPAWN_SWORDSMAN 1 5 1 10 1 0 0",
+                    "MARCH 1 5 8",
+                    "SPAWN_HUNTER 2 5 8 10 4 1 5 0 5",
+                },
+                .expectations = {
+                    "[0] MAP_CREATED width=10 height=10 ",
+                    "[0] UNIT_SPAWNED unitId=1 unitType=swordsman x=5 y=1 ",
+                    "[0] MARCH_STARTED unitId=1 x=5 y=1 targetX=5 targetY=8 ",
+                    "[0] UNIT_SPAWNED unitId=2 unitType=hunter x=5 y=8 ",
+                    "[1] UNIT_MOVED unitId=1 x=5 y=2 ",
+                    "[2] UNIT_MOVED unitId=1 x=5 y=3 ",
+                    "[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=4 targetHp=6 ",
+                    "[3] UNIT_MOVED unitId=1 x=5 y=4 ",
+                    "[3] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=4 targetHp=2 ",
+                    "[4] UNIT_MOVED unitId=1 x=5 y=5 ",
+                    "[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=4 targetHp=0 ",
+                    "[4] UNIT_DIED unitId=1 ",
+                },
+            }},
+        };
+    }
+
     Bucket Usage::generateScenarios()
     {
         return {

@@ -25,6 +25,7 @@ namespace tests {
 
     struct Usage {
         static Bucket generateScenarios();
+        static Bucket generateNewScenarios();
         static CheckReport checkEqual(const Strings& reports, const Strings& expectations);
 
     };

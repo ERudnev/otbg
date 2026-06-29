@@ -12,7 +12,8 @@ int main(int, char**)
 {
     using namespace swexp;
 
-    const tests::Bucket bucket = tests::Usage::generateScenarios();
+    //const tests::Bucket bucket = tests::Usage::generateScenarios();
+    const tests::Bucket bucket = tests::Usage::generateNewScenarios();
     int failedCount = 0;
 
     for (const auto& [name, scenario] : bucket)
