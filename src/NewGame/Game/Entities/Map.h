@@ -22,7 +22,7 @@ namespace swexp::game::entity
             uint32_t height;
         };
         struct Actions final : BaseActions {
-            static auto create(Writing, const State&)->Id;
+            static auto spawn(Writing, const State&)->Id;
         };
 
         struct Emitters final : BaseEmitters {

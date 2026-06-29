@@ -9,4 +9,13 @@ namespace swexp::core::mechanism
     {
         _INCOMPLETE_;
     }
+
+    StateProcessing::EmittersSummary StateProcessing::emitEvents(
+        const State& begin, const State& end, sw::EventSystem& listener)
+    {
+        (void)begin;
+        (void)end;
+        (void)listener;
+        _INCOMPLETE_;
+    }
 }

@@ -62,9 +62,11 @@ namespace swexp::game
 		//const auto results = core::operations::Normalizer::repair(state);
 	}
 
-	void World::createMap(uint32_t, uint32_t)
+	void World::createMap(uint32_t width, uint32_t height)
 	{
-		_INCOMPLETE_;
+		Transaction tx(state, eventReceiver);
+		map = with<entity::Map>::spawn(tx, {width, height});
+		_LOG_DEBUG_("created Map, waiting for Scoped Transactions emit message...");
 	}
 
 	void World::spawnSwordsman(UnitId id, const composition::Swordsman::Actions::SpawnParameters& parameters)
@@ -74,8 +76,6 @@ namespace swexp::game
 		//with<entity::Unit>::remove(state, id);
 		//core::operations::normalize(state);
 		registeredUnits[id] = with<composition::Swordsman>::spawn(tx, parameters);
-
-		_INCOMPLETE_;
 	}
 
 	void World::march(uint32_t, Position)
