@@ -2,6 +2,6 @@
 
 namespace swexp::core::meta
 {
-    template<typename Meta>
+    template <typename Meta>
     using Item = typename Meta::State;
 }

@@ -2,32 +2,32 @@
 
 namespace sw::io
 {
-	void CommandParser::parse(std::istream& stream)
-	{
-		std::string line;
-		while (std::getline(stream, line))
-		{
-			if (line.rfind("//", 0) == 0 || line.empty())
-			{
-				continue;
-			}
+    void CommandParser::parse(std::istream& stream)
+    {
+        std::string line;
+        while (std::getline(stream, line))
+        {
+            if (line.rfind("//", 0) == 0 || line.empty())
+            {
+                continue;
+            }
 
-			std::istringstream commandStream(line);
-			std::string commandName;
-			commandStream >> commandName;
+            std::istringstream commandStream(line);
+            std::string commandName;
+            commandStream >> commandName;
 
-			if (commandName.empty())
-			{
-				continue;
-			}
+            if (commandName.empty())
+            {
+                continue;
+            }
 
-			auto command = _commands.find(commandName);
-			if (command == _commands.end())
-			{
-				throw std::runtime_error("Unknown command: " + commandName);
-			}
+            auto command = _commands.find(commandName);
+            if (command == _commands.end())
+            {
+                throw std::runtime_error("Unknown command: " + commandName);
+            }
 
-			command->second(commandStream);
-		}
-	}
+            command->second(commandStream);
+        }
+    }
 }

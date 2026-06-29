@@ -10,13 +10,19 @@ namespace swexp::game::entity
     {
         auto unit = ask::try_get<Unit>(writing, id);
         if (not unit)
+        {
             return false;
+        }
 
         if (unit->hitPoints == 0)
+        {
             return false;
+        }
 
         if (not unit->turnStrategy)
+        {
             return false;
+        }
 
         return unit->turnStrategy(writing, id);
     }

@@ -12,7 +12,7 @@ int main(int, char**)
 {
     using namespace swexp;
 
-    //const tests::Bucket bucket = tests::Usage::generateScenarios();
+    // const tests::Bucket bucket = tests::Usage::generateScenarios();
     const tests::Bucket bucket = tests::Usage::generateNewScenarios();
     int failedCount = 0;
 
@@ -54,10 +54,12 @@ int main(int, char**)
                                         .hitPoints = command.hp,
                                         .ranged = {.minRange = 2, .maxRange = command.range, .damage = command.agility},
                                         .melee = {.strength = command.strength},
-                                        .poisonArrows = {.chance = command.chance, .damage = command.poison, .duration = 5},
+                                        .poisonArrows
+                                        = {.chance = command.chance, .damage = command.poison, .duration = 5},
                                 });
                     });
-            parser.add<io::March>([&world](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); });
+            parser.add<io::March>([&world](auto command)
+                                  { world.march(command.unitId, {command.targetX, command.targetY}); });
 
             capture.emplace();
             auto input = tests::internals::serialise(scenario.commands);
@@ -87,7 +89,9 @@ int main(int, char**)
                 {
                     std::cout << "  matched events:" << std::endl;
                     for (const auto& matched : report.matched)
+                    {
                         std::cout << std::format("    {}", matched) << std::endl;
+                    }
                 }
 
                 for (const auto& mismatch : report.mismatches)
@@ -99,18 +103,22 @@ int main(int, char**)
         catch (std::exception& e)
         {
             tests::Strings captured;
-            if (capture) {
+            if (capture)
+            {
                 captured = capture->lines();
-                capture.reset();  // вернуть cout из buffer
+                capture.reset(); // вернуть cout из buffer
             }
             std::cout << std::format(R"(CRITICAL: Scenario "{}": {})", name, e.what()) << '\n';
             for (const auto& line : captured)
+            {
                 std::cout << "  " << line << '\n';
+            }
             ++failedCount;
         }
     }
 
-    std::cout << std::format("finished {} tests with {}/{} good/failed", bucket.size(), bucket.size() - failedCount, failedCount);
+    std::cout << std::format(
+            "finished {} tests with {}/{} good/failed", bucket.size(), bucket.size() - failedCount, failedCount);
 
     return failedCount == 0 ? 0 : 1;
 }

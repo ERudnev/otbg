@@ -6,19 +6,18 @@
 #include <sstream>
 #include <string>
 
-namespace tests::internals {
+namespace tests::internals
+{
 
     class CoutCapture
     {
     public:
-        CoutCapture() :
-                _oldBuffer(std::cout.rdbuf(_buffer.rdbuf()))
-        {}
-
-        ~CoutCapture()
+        CoutCapture()
+            : _oldBuffer(std::cout.rdbuf(_buffer.rdbuf()))
         {
-            std::cout.rdbuf(_oldBuffer);
         }
+
+        ~CoutCapture() { std::cout.rdbuf(_oldBuffer); }
 
         tests::Strings lines() const
         {

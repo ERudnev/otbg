@@ -2,12 +2,14 @@
 
 namespace swexp::core::model::complex
 {
-    State::State(Schema schema) : intertype::Composition(schema)
+    State::State(Schema schema)
+        : intertype::Composition(schema)
     {
         fillZeroState();
     }
 
-    State::State(const State& other) : intertype::Composition(other.schema)
+    State::State(const State& other)
+        : intertype::Composition(other.schema)
     {
         for (const auto& [typeId, line] : other.lines)
         {

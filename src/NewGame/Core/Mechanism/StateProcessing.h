@@ -18,7 +18,8 @@ namespace swexp::core::mechanism
         // Just stats for debug? No other use is visible atm.
         using EmittersSummary = NormalizationSummary;
 
-        static NormalizationSummary normalize(const State& initial, const State& updated, State& reactions, core::ReportingContext);
+        static NormalizationSummary
+        normalize(const State& initial, const State& updated, State& reactions, core::ReportingContext);
         static EmittersSummary emitEvents(const State& begin, const State& end, core::ReportingContext);
     };
 }

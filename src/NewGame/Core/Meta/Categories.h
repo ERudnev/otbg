@@ -11,12 +11,11 @@
 #include "NewGame/Core/Operations/Normalization/Component.h"
 #include "NewGame/Core/Model/Complex.h"
 
-
 namespace swexp::core::cetegory
 {
     // This is collapsed "State/Operations/Normalizators/Commands/Emitters" Meta-class
     // See documentation for details
-    template<typename Meta>
+    template <typename Meta>
     struct Entity {
         // TODO: disable default c-tor for this one.
         // TODO: use non-alias type generator like EnTT Identifier<Meta>
@@ -29,7 +28,10 @@ namespace swexp::core::cetegory
             using Writing = api::context::Writing;
 
         protected:
-            static const meta::Item<Meta>& Get(Reading context, Id id) { return context.state.line<Meta>().elements.at(id); }
+            static const meta::Item<Meta>& Get(Reading context, Id id)
+            {
+                return context.state.line<Meta>().elements.at(id);
+            }
             static meta::Item<Meta>& Get(Writing context, Id id) { return context.state.line<Meta>().elements.at(id); }
         };
 
@@ -44,7 +46,7 @@ namespace swexp::core::cetegory
         };
     };
 
-    template<typename Meta, typename Parent>
+    template <typename Meta, typename Parent>
     struct Extension : protected Entity<Meta> {
         using Id = typename Parent::Id;
 
@@ -54,6 +56,7 @@ namespace swexp::core::cetegory
         struct BaseReactions : Entity<Meta>::BaseReactions {
             using Reacting = typename Entity<Meta>::BaseReactions::Reacting;
             using Summary = typename Entity<Meta>::BaseReactions::Summary;
+
         protected:
             static Summary _category_default_reactions(Reacting context)
             {
@@ -66,7 +69,7 @@ namespace swexp::core::cetegory
     };
 
     // TODO: adding BaseActions rules and make Effect not similar to Extension
-    template<typename Meta, typename Parent>
+    template <typename Meta, typename Parent>
     struct Effect : protected Entity<Meta> {
         using Id = typename Parent::Id;
 
@@ -76,6 +79,7 @@ namespace swexp::core::cetegory
         struct BaseReactions : Entity<Meta>::BaseReactions {
             using Reacting = typename Entity<Meta>::BaseReactions::Reacting;
             using Summary = typename Entity<Meta>::BaseReactions::Summary;
+
         protected:
             static Summary _category_default_reactions(Reacting context)
             {
@@ -88,8 +92,7 @@ namespace swexp::core::cetegory
     };
 
     // TODO: create Composition rules for this Category
-    template<typename Meta, typename AnchorEntity>
+    template <typename Meta, typename AnchorEntity>
     using Composition = Extension<Meta, AnchorEntity>;
-
 
 }

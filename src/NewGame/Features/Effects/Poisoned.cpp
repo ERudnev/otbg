@@ -24,9 +24,13 @@ namespace swexp::game::effect
             }
 
             if (it->second.remainingTurns == 0)
+            {
                 it = poisoned.erase(it);
+            }
             else
+            {
                 ++it;
+            }
         }
 
         return updatedEffects;
@@ -55,10 +59,12 @@ namespace swexp::game::effect
             }
 
             Damage damage = static_cast<Damage>(
-                (effect.damageBudgetRemaining + effect.remainingTurns - 1) / effect.remainingTurns);
+                    (effect.damageBudgetRemaining + effect.remainingTurns - 1) / effect.remainingTurns);
 
             if (rended.contains(it->first))
+            {
                 damage = static_cast<Damage>(damage * 2);
+            }
 
             damage = std::min(damage, effect.damageBudgetRemaining);
             if (damage == 0)
@@ -68,23 +74,26 @@ namespace swexp::game::effect
             }
 
             effect.damageBudgetRemaining -= damage;
-            target->hitPoints = target->hitPoints > damage
-                ? static_cast<entity::Unit::HitPoints>(target->hitPoints - damage)
-                : 0;
+            target->hitPoints
+                    = target->hitPoints > damage ? static_cast<entity::Unit::HitPoints>(target->hitPoints - damage) : 0;
 
-            writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitAttacked{
-                .attackerUnitId = effect.applier,
-                .targetUnitId = it->first,
-                .damage = damage,
-                .targetHp = target->hitPoints,
-            });
+            writing.reporting.system->event(
+                    writing.reporting.currentTurn,
+                    sw::io::UnitAttacked{
+                            .attackerUnitId = effect.applier,
+                            .targetUnitId = it->first,
+                            .damage = damage,
+                            .targetHp = target->hitPoints,
+                    });
             ++appliedEffects;
 
             if (target->hitPoints == 0)
             {
-                writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitDied{
-                    .unitId = it->first,
-                });
+                writing.reporting.system->event(
+                        writing.reporting.currentTurn,
+                        sw::io::UnitDied{
+                                .unitId = it->first,
+                        });
                 writing.state.line<entity::Unit>().elements.erase(it->first);
                 it = poisoned.erase(it);
                 continue;

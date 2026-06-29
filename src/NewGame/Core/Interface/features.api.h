@@ -6,27 +6,28 @@
 #include "NewGame/Core/Model/_forwards.h"
 
 // Gather core types to expose against Game features code
-namespace swexp::core::api {
+namespace swexp::core::api
+{
 
     // World-wide types:
     using Schema = swexp::core::model::Schema;
 
     // Feature categories:
-    template<typename Meta>
+    template <typename Meta>
     using Entity = ::swexp::core::cetegory::Entity<Meta>;
 
-    template<typename Meta, typename Parent>
+    template <typename Meta, typename Parent>
     using Extension = ::swexp::core::cetegory::Extension<Meta, Parent>;
 
-    template<typename Meta, typename Parent>
+    template <typename Meta, typename Parent>
     using Effect = ::swexp::core::cetegory::Effect<Meta, Parent>;
 
-    template<typename Meta, typename AnchorEntity>
+    template <typename Meta, typename AnchorEntity>
     using Composition = ::swexp::core::cetegory::Composition<Meta, AnchorEntity>;
 
     // manipulation (helpers)
     // experimental sugar
-    template<typename Meta>
+    template <typename Meta>
     using with = ::swexp::core::manipulation::call<Meta>;
 
     // Allow users shorcut to getters:

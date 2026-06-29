@@ -6,14 +6,14 @@
 
 namespace swexp::core::normalization
 {
-    template<typename ComponentType, typename ParentType>
+    template <typename ComponentType, typename ParentType>
     size_t deleteWithParent(core::api::context::Reacting reacting);
 }
 
 // Impl
 namespace swexp::core::normalization
 {
-    template<typename ComponentType, typename ParentType>
+    template <typename ComponentType, typename ParentType>
     size_t deleteWithParent(core::api::context::Reacting reacting)
     {
         const auto& initial = reacting.initial.state;
@@ -22,7 +22,9 @@ namespace swexp::core::normalization
 
         size_t result = 0;
         for (const auto parentId : mechanism::helpers::findDeleted<ParentType>(initial, updated))
+        {
             result += adjustments.line<ComponentType>().elements.erase(parentId);
+        }
 
         return result;
     }

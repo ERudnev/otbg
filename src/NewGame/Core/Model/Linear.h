@@ -16,7 +16,7 @@ namespace swexp::core::model::linear
     };
 
     // TODO: use concepts here
-    template<typename Meta>
+    template <typename Meta>
     struct State : Erased {
         using ElementId = typename elementary::Id<Meta>;
         using ElementState = typename elementary::State<Meta>;
@@ -26,10 +26,10 @@ namespace swexp::core::model::linear
         // TODO: separate helpers as Core/Manipulation layer.. someday.
         ElementId createEntity(ElementState&&);
 
-        template<typename ParentType>
+        template <typename ParentType>
         void createComponent(typename ParentType::Id, ElementState&&);
 
-        template<typename ParentType>
+        template <typename ParentType>
         void createOrUpdateComponent(typename ParentType::Id, ElementState&&);
 
     private:
@@ -39,32 +39,36 @@ namespace swexp::core::model::linear
 
 namespace swexp::core::model::linear
 {
-    template<typename Meta>
+    template <typename Meta>
     auto State<Meta>::createEntity(ElementState&& item) -> ElementId
     {
         const ElementId id = static_cast<ElementId>(elements.size());
         return createNewItem(id, std::move(item));
     }
 
-    template<typename Meta>
-    template<typename ParentType>
+    template <typename Meta>
+    template <typename ParentType>
     void State<Meta>::createComponent(typename ParentType::Id parentId, ElementState&& item)
     {
         createNewItem(static_cast<ElementId>(parentId), std::move(item));
     }
 
-    template<typename Meta>
-    template<typename ParentType>
+    template <typename Meta>
+    template <typename ParentType>
     void State<Meta>::createOrUpdateComponent(typename ParentType::Id parentId, ElementState&& item)
     {
         const ElementId id = static_cast<ElementId>(parentId);
         if (const auto existing = elements.find(id); existing != elements.end())
+        {
             existing->second = std::move(item);
+        }
         else
+        {
             elements.emplace(id, std::move(item));
+        }
     }
 
-    template<typename Meta>
+    template <typename Meta>
     auto State<Meta>::createNewItem(ElementId id, ElementState&& item) -> ElementId
     {
         const auto [_, inserted] = elements.try_emplace(id, std::move(item));

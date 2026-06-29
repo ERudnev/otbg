@@ -4,21 +4,22 @@
 
 namespace sw
 {
-	class PrintFieldVisitor
-	{
-	public:
-		explicit PrintFieldVisitor(std::ostream& stream) :
-				_stream(stream)
-		{}
+    class PrintFieldVisitor
+    {
+    public:
+        explicit PrintFieldVisitor(std::ostream& stream)
+            : _stream(stream)
+        {
+        }
 
-		template <typename T>
-		void visit(const char* name, const T& value)
-		{
-			_stream << name << "=" << value << ' ';
-		}
+        template <typename T>
+        void visit(const char* name, const T& value)
+        {
+            _stream << name << "=" << value << ' ';
+        }
 
-	private:
-		std::ostream& _stream;
-	};
+    private:
+        std::ostream& _stream;
+    };
 
 }

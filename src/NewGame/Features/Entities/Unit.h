@@ -21,7 +21,7 @@ namespace swexp::game::entity
 
         struct Actions final : BaseActions {
             // replacement of original sw::game::Map::_positionByUnitId
-            static auto findOccupying(Reading, Map::Position)->Id;
+            static auto findOccupying(Reading, Map::Position) -> Id;
             static bool makeTurn(Writing, Id); // returns "turn was spent"; false means idle
         };
 

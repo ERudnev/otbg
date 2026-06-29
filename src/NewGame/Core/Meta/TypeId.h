@@ -13,7 +13,7 @@ namespace swexp::core::meta
     using StaticTypeId = std::string;
     // Current implementation is runtime/compiler-dependent,
     // but still better than passing borrowed const char* around.
-    template<typename Meta>
+    template <typename Meta>
     const StaticTypeId& debugName()
     {
         static const StaticTypeId singleton = typeid(Meta).name();

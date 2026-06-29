@@ -17,11 +17,12 @@ namespace swexp::core::model::complex
 
         Schema getSchema() const { return schema; }
 
-        template<typename Meta>
+        template <typename Meta>
         const linear::State<Meta>& line() const;
 
-        template<typename Meta>
+        template <typename Meta>
         linear::State<Meta>& line();
+
     private:
         void fillZeroState();
     };
@@ -30,7 +31,7 @@ namespace swexp::core::model::complex
 // Impl:
 namespace swexp::core::model::complex
 {
-    template<typename Meta>
+    template <typename Meta>
     const linear::State<Meta>& State::line() const
     {
         const auto iterator = lines.find(typeid(Meta));
@@ -48,7 +49,7 @@ namespace swexp::core::model::complex
         return *typed;
     }
 
-    template<typename Meta>
+    template <typename Meta>
     linear::State<Meta>& State::line()
     {
         const auto iterator = lines.find(typeid(Meta));

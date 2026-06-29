@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 
-namespace tests {
+namespace tests
+{
 
     using Strings = std::vector<std::string>;
 
@@ -29,6 +30,5 @@ namespace tests {
         static Bucket generateScenarios();
         static Bucket generateNewScenarios();
         static CheckReport checkEqual(const Strings& reports, const Scenario& scenario);
-
     };
 }

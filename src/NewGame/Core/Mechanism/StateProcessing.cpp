@@ -6,10 +6,10 @@
 namespace swexp::core::mechanism
 {
     StateProcessing::NormalizationSummary StateProcessing::normalize(
-        const StateProcessing::State& initial,
-        const StateProcessing::State& updated,
-        StateProcessing::State& reactions,
-        core::ReportingContext reporting)
+            const StateProcessing::State& initial,
+            const StateProcessing::State& updated,
+            StateProcessing::State& reactions,
+            core::ReportingContext reporting)
     {
         NormalizationSummary result = 0;
 
@@ -17,7 +17,9 @@ namespace swexp::core::mechanism
         for (const auto& [_, type] : schema->types)
         {
             if (!type.callReactions)
+            {
                 continue;
+            }
 
             result += type.callReactions(initial, updated, reactions, reporting);
         }
@@ -26,9 +28,7 @@ namespace swexp::core::mechanism
     }
 
     StateProcessing::EmittersSummary StateProcessing::emitEvents(
-        const StateProcessing::State& begin,
-        const StateProcessing::State& end,
-        core::ReportingContext reporting)
+            const StateProcessing::State& begin, const StateProcessing::State& end, core::ReportingContext reporting)
     {
         EmittersSummary result = 0;
 
@@ -36,7 +36,9 @@ namespace swexp::core::mechanism
         for (const auto& [_, type] : schema->types)
         {
             if (!type.callEmitters)
+            {
                 continue;
+            }
 
             type.callEmitters(begin, end, reporting);
             ++result;

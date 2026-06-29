@@ -4,18 +4,17 @@
 
 namespace sw::io
 {
-	struct CreateMap
-	{
-		constexpr static const char* Name = "CREATE_MAP";
+    struct CreateMap {
+        constexpr static const char* Name = "CREATE_MAP";
 
-		uint32_t width{};
-		uint32_t height{};
+        uint32_t width{};
+        uint32_t height{};
 
-		template <typename Visitor>
-		void visit(Visitor& visitor)
-		{
-			visitor.visit("width", width);
-			visitor.visit("height", height);
-		}
-	};
+        template <typename Visitor>
+        void visit(Visitor& visitor)
+        {
+            visitor.visit("width", width);
+            visitor.visit("height", height);
+        }
+    };
 }

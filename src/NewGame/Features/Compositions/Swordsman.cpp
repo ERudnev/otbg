@@ -21,24 +21,26 @@ namespace swexp::game::composition
 
         const entity::Unit::Id unitId = parameters.externalId;
         const auto [_, inserted] = draft.line<entity::Unit>().elements.try_emplace(
-            unitId,
-            entity::Unit::State{
-                .position = parameters.position,
-                .hitPoints = parameters.hitPoints,
-                .turnStrategy = &makeTurn,
-            });
+                unitId,
+                entity::Unit::State{
+                        .position = parameters.position,
+                        .hitPoints = parameters.hitPoints,
+                        .turnStrategy = &makeTurn,
+                });
         if (not inserted)
+        {
             throw std::logic_error("Swordsman::Actions::spawn: duplicate unit id");
+        }
 
         draft.line<ability::LandMovement>().createComponent<entity::Unit>(unitId, {});
         draft.line<ability::MeleeAttack>().createComponent<entity::Unit>(
-            unitId, ability::MeleeAttack::State{parameters.melee});
+                unitId, ability::MeleeAttack::State{parameters.melee});
         draft.line<ability::Rending>().createComponent<entity::Unit>(
-            unitId, ability::Rending::State{parameters.rending});
+                unitId, ability::Rending::State{parameters.rending});
 
         const auto swordsmanNumber = draft.line<Swordsman>().elements.size() + 1;
         draft.line<Swordsman>().createComponent<entity::Unit>(
-            unitId, State{.name = std::format("Swordsman#{}", swordsmanNumber)});
+                unitId, State{.name = std::format("Swordsman#{}", swordsmanNumber)});
 
         return unitId;
     }
@@ -48,18 +50,24 @@ namespace swexp::game::composition
         // Runtime shortcut: current prototype assumes the newest map is the active battlefield.
         const auto& maps = writing.state.line<entity::Map>().elements;
         if (maps.empty())
+        {
             return false;
+        }
 
         entity::Map::Id mapId = maps.begin()->first;
         for (const auto& [candidateId, _] : maps)
         {
             if (candidateId > mapId)
+            {
                 mapId = candidateId;
+            }
         }
 
         auto unit = ask::try_get<entity::Unit>(writing, id);
         if (not unit)
+        {
             return false;
+        }
 
         // Swordsman policy matches the reference world: attack adjacent live targets before moving.
         std::vector<uint32_t> targetUnitIds;
@@ -69,17 +77,23 @@ namespace swexp::game::composition
         {
             auto target = ask::try_get<entity::Unit>(writing, targetUnitId);
             if (not target or target->hitPoints == 0)
+            {
                 continue;
+            }
 
             if (not ability::Rending::Actions::tryApply(writing, id, targetUnitId))
+            {
                 ability::MeleeAttack::Actions::attack(writing, id, targetUnitId);
+            }
 
             target = ask::try_get<entity::Unit>(writing, targetUnitId);
             if (target and target->hitPoints == 0)
             {
-                writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitDied{
-                    .unitId = targetUnitId,
-                });
+                writing.reporting.system->event(
+                        writing.reporting.currentTurn,
+                        sw::io::UnitDied{
+                                .unitId = targetUnitId,
+                        });
                 writing.state.line<entity::Unit>().elements.erase(targetUnitId);
             }
 
@@ -89,7 +103,9 @@ namespace swexp::game::composition
         // No adjacent target: try to advance along the current move order.
         auto order = ask::try_get<effect::OrderedToMove>(writing, id);
         if (not order)
+        {
             return false;
+        }
 
         const auto targetPosition = order->targetPosition;
         entity::Map::Position nextPosition;
@@ -98,11 +114,13 @@ namespace swexp::game::composition
         {
             unit->position = nextPosition;
             moved = true;
-            writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitMoved{
-                .unitId = id,
-                .x = nextPosition.x,
-                .y = nextPosition.y,
-            });
+            writing.reporting.system->event(
+                    writing.reporting.currentTurn,
+                    sw::io::UnitMoved{
+                            .unitId = id,
+                            .x = nextPosition.x,
+                            .y = nextPosition.y,
+                    });
         }
 
         bool marchEnded = false;
@@ -115,10 +133,7 @@ namespace swexp::game::composition
         return moved or marchEnded;
     }
 
-    void Swordsman::Emitters::_generated_call_all(Emitting emitting)
-    {
-        unitSpawned(emitting);
-    }
+    void Swordsman::Emitters::_generated_call_all(Emitting emitting) { unitSpawned(emitting); }
 
     void Swordsman::Emitters::unitSpawned(Emitting emitting)
     {
@@ -129,12 +144,14 @@ namespace swexp::game::composition
         {
             const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
 
-            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::UnitSpawned{
-                .unitId = id,
-                .unitType = "swordsman",
-                .x = unitState.position.x,
-                .y = unitState.position.y,
-            });
+            emitting.reporting.system->event(
+                    emitting.reporting.currentTurn,
+                    sw::io::UnitSpawned{
+                            .unitId = id,
+                            .unitType = "swordsman",
+                            .x = unitState.position.x,
+                            .y = unitState.position.y,
+                    });
         }
     }
 }

@@ -249,10 +249,14 @@ namespace tests
                     {
                         const size_t index = static_cast<size_t>(&actual - reports.data());
                         if (matchedReports[index])
+                        {
                             return false;
+                        }
 
                         if (scenario.allowExpectationSubstrings)
+                        {
                             return actual.find(expected) != std::string::npos;
+                        }
 
                         return actual == expected;
                     });
@@ -271,7 +275,9 @@ namespace tests
         }
 
         if (scenario.allowUnexpectedActualEvents)
+        {
             return result;
+        }
 
         for (size_t index = 0; index < reports.size(); ++index)
         {

@@ -16,9 +16,13 @@ namespace swexp::game::effect
             }
 
             if (it->second.remainingTurns == 0)
+            {
                 it = rended.erase(it);
+            }
             else
+            {
                 ++it;
+            }
         }
 
         return updatedEffects;

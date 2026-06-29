@@ -10,8 +10,7 @@ namespace swexp::game::effect
 
     OrderedToMove::Reactions::Summary OrderedToMove::Reactions::_generated_call_all(Reacting reacting)
     {
-        return _category_default_reactions(reacting)
-            + finishedMarchRemoved(reacting);
+        return _category_default_reactions(reacting) + finishedMarchRemoved(reacting);
     }
     void OrderedToMove::Emitters::_generated_call_all(Emitting emitting)
     {
@@ -22,14 +21,10 @@ namespace swexp::game::effect
     void OrderedToMove::Actions::order(Writing writing, entity::Unit::Id unitId, entity::Map::Position target)
     {
         writing.state.line<OrderedToMove>().createOrUpdateComponent<entity::Unit>(
-            unitId, State{.targetPosition = target});
+                unitId, State{.targetPosition = target});
     }
 
-
-    OrderedToMove::Reactions::Summary OrderedToMove::Reactions::finishedMarchRemoved(Reacting)
-    {
-        return 0;
-    }
+    OrderedToMove::Reactions::Summary OrderedToMove::Reactions::finishedMarchRemoved(Reacting) { return 0; }
 
     void OrderedToMove::Emitters::marchStarted(Emitting emitting)
     {
@@ -41,13 +36,15 @@ namespace swexp::game::effect
             const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
             const auto& orderState = ask::get<OrderedToMove>(emitting.updated, id);
 
-            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::MarchStarted{
-                .unitId = id,
-                .x = unitState.position.x,
-                .y = unitState.position.y,
-                .targetX = orderState.targetPosition.x,
-                .targetY = orderState.targetPosition.y,
-            });
+            emitting.reporting.system->event(
+                    emitting.reporting.currentTurn,
+                    sw::io::MarchStarted{
+                            .unitId = id,
+                            .x = unitState.position.x,
+                            .y = unitState.position.y,
+                            .targetX = orderState.targetPosition.x,
+                            .targetY = orderState.targetPosition.y,
+                    });
         }
     }
 
@@ -60,13 +57,17 @@ namespace swexp::game::effect
         {
             const auto unitState = ask::try_get<entity::Unit>(emitting.updated, id);
             if (not unitState)
+            {
                 continue;
+            }
 
-            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::MarchEnded{
-                .unitId = id,
-                .x = unitState->position.x,
-                .y = unitState->position.y,
-            });
+            emitting.reporting.system->event(
+                    emitting.reporting.currentTurn,
+                    sw::io::MarchEnded{
+                            .unitId = id,
+                            .x = unitState->position.x,
+                            .y = unitState->position.y,
+                    });
         }
     }
 }
