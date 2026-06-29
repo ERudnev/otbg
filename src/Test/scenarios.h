@@ -9,6 +9,7 @@ namespace tests {
     using Strings = std::vector<std::string>;
 
     struct Scenario;
+    struct CheckReport;
     using Bucket = std::unordered_map<std::string, Scenario>;
 
     struct Scenario {
@@ -17,9 +18,14 @@ namespace tests {
         Strings expectations;
     };
 
+    struct CheckReport {
+        Strings matched;
+        Strings mismatches;
+    };
+
     struct Usage {
         static Bucket generateScenarios();
-        static Strings checkEqual(const Strings& reports, const Strings& expectations);
+        static CheckReport checkEqual(const Strings& reports, const Strings& expectations);
 
     };
 }

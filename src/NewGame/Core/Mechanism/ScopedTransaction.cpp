@@ -22,11 +22,11 @@ namespace swexp::core::mechanism
         for (size_t cycle = 0; cycle < maxNormalizationCycles; ++cycle)
         {
             State better(want);
-            const auto improvements = StateProcessing::normalize(was, want, better);
+            const auto improvements = StateProcessing::normalize(was, want, better, reporting);
 
             if (improvements == 0)
             {
-                StateProcessing::emitEvents(initial, want, receiver);
+                StateProcessing::emitEvents(initial, want, reporting);
                 state.applyFrom(want);
                 return;
             }

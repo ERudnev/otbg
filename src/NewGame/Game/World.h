@@ -58,6 +58,7 @@ namespace swexp::game
 
 		// own state:
 		Turn currentTurn{0};
+		size_t actionsLastTurn{1};
         entity::Map::Id map;
 		std::vector<UnitId> registeredUnits;
 

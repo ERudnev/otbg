@@ -8,7 +8,8 @@ namespace swexp::core::mechanism
     StateProcessing::NormalizationSummary StateProcessing::normalize(
         const StateProcessing::State& initial,
         const StateProcessing::State& updated,
-        StateProcessing::State& reactions)
+        StateProcessing::State& reactions,
+        core::ReportingContext reporting)
     {
         NormalizationSummary result = 0;
 
@@ -18,7 +19,7 @@ namespace swexp::core::mechanism
             if (!type.callReactions)
                 continue;
 
-            result += type.callReactions(initial, updated, reactions);
+            result += type.callReactions(initial, updated, reactions, reporting);
         }
 
         return result;
@@ -27,7 +28,7 @@ namespace swexp::core::mechanism
     StateProcessing::EmittersSummary StateProcessing::emitEvents(
         const StateProcessing::State& begin,
         const StateProcessing::State& end,
-        sw::EventSystem& listener)
+        core::ReportingContext reporting)
     {
         EmittersSummary result = 0;
 
@@ -37,7 +38,7 @@ namespace swexp::core::mechanism
             if (!type.callEmitters)
                 continue;
 
-            type.callEmitters(begin, end, listener);
+            type.callEmitters(begin, end, reporting);
             ++result;
         }
 

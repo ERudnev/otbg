@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(src)
 
-set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT sw_battle_test)
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT scenario_runner)

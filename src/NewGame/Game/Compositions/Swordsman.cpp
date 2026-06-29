@@ -76,7 +76,12 @@ namespace swexp::game::composition
 
             target = ask::try_get<entity::Unit>(writing, targetUnitId);
             if (target and target->hitPoints == 0)
+            {
+                writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitDied{
+                    .unitId = targetUnitId,
+                });
                 writing.state.line<entity::Unit>().elements.erase(targetUnitId);
+            }
 
             return true;
         }
@@ -88,14 +93,26 @@ namespace swexp::game::composition
 
         const auto targetPosition = order->targetPosition;
         entity::Map::Position nextPosition;
+        bool moved = false;
         if (entity::Map::Actions::tryGetNextPosition(writing, mapId, unit->position, targetPosition, nextPosition))
+        {
             unit->position = nextPosition;
+            moved = true;
+            writing.reporting.system->event(writing.reporting.currentTurn, sw::io::UnitMoved{
+                .unitId = id,
+                .x = nextPosition.x,
+                .y = nextPosition.y,
+            });
+        }
 
+        bool marchEnded = false;
         if (unit->position == targetPosition)
+        {
             writing.state.line<effect::OrderedToMove>().elements.erase(id);
+            marchEnded = true;
+        }
 
-        // Order existed, so the unit spent its turn even if the step was blocked.
-        return true;
+        return moved or marchEnded;
     }
 
     void Swordsman::Emitters::_generated_call_all(Emitting emitting)
@@ -112,7 +129,7 @@ namespace swexp::game::composition
         {
             const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
 
-            emitting.listener.event(0, sw::io::UnitSpawned{
+            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::UnitSpawned{
                 .unitId = id,
                 .unitType = "swordsman",
                 .x = unitState.position.x,

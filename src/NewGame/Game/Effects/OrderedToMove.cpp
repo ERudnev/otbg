@@ -41,7 +41,7 @@ namespace swexp::game::effect
             const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
             const auto& orderState = ask::get<OrderedToMove>(emitting.updated, id);
 
-            emitting.listener.event(0, sw::io::MarchStarted{
+            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::MarchStarted{
                 .unitId = id,
                 .x = unitState.position.x,
                 .y = unitState.position.y,
@@ -62,7 +62,7 @@ namespace swexp::game::effect
             if (not unitState)
                 continue;
 
-            emitting.listener.event(0, sw::io::MarchEnded{
+            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::MarchEnded{
                 .unitId = id,
                 .x = unitState->position.x,
                 .y = unitState->position.y,

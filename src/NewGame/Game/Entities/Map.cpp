@@ -90,8 +90,7 @@ namespace swexp::game::entity
         {
             const auto& mapState = ask::get<Map>(emitting.updated, id);
 
-            _LOG_DEBUG_("Emitting Map Created");
-            emitting.listener.event(0, sw::io::MapCreated{
+            emitting.reporting.system->event(emitting.reporting.currentTurn, sw::io::MapCreated{
                 .width = mapState.width,
                 .height = mapState.height,
             });

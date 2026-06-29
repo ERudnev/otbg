@@ -169,9 +169,9 @@ namespace tests
         };
     }
 
-    Strings Usage::checkEqual(const Strings& reports, const Strings& expectations)
+    CheckReport Usage::checkEqual(const Strings& reports, const Strings& expectations)
     {
-        Strings mismatches;
+        CheckReport result;
 
         std::vector<bool> matchedReports(reports.size(), false);
 
@@ -189,12 +189,13 @@ namespace tests
             {
                 std::ostringstream message;
                 message << "missing expected event [" << expected << "]";
-                mismatches.push_back(message.str());
+                result.mismatches.push_back(message.str());
                 continue;
             }
 
             const size_t matchedIndex = static_cast<size_t>(&(*match) - reports.data());
             matchedReports[matchedIndex] = true;
+            result.matched.push_back(expected);
         }
 
         for (size_t index = 0; index < reports.size(); ++index)
@@ -203,10 +204,10 @@ namespace tests
             {
                 std::ostringstream message;
                 message << "unexpected actual event [" << reports[index] << "]";
-                mismatches.push_back(message.str());
+                result.mismatches.push_back(message.str());
             }
         }
 
-        return mismatches;
+        return result;
     }
 }

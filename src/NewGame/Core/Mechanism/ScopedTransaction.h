@@ -3,6 +3,7 @@
 #include "IO/System/EventSystem.hpp"
 #include "NewGame/Core/Operations/_forwards.h"
 #include "NewGame/Core/Model/Complex.h"
+#include "NewGame/Core/ReportingContext.h"
 
 // Contexts spawned:
 #include "NewGame/Core/Operations/ContextData.h"
@@ -22,16 +23,17 @@ namespace swexp::core::mechanism
         using Emitting = api::context::Emitting;
 
 
-        ScopedTransaction(State& target, sw::EventSystem& receiver) : state(target), collected(target), receiver(receiver) {} // deep copy of target state
+        ScopedTransaction(State& target, core::ReportingContext reporting)
+            : state(target), collected(target), reporting(reporting) {} // deep copy of target state
         ~ScopedTransaction() { finish(); }
 
-        operator Reading() { return Reading{collected}; } // returning initial state allow independent operaions
-        operator Writing() { return Writing{collected}; }
+        operator Reading() { return Reading{collected, reporting}; } // returning initial state allow independent operaions
+        operator Writing() { return Writing{collected, reporting}; }
 
     private:
         State& state;
         State collected;
-        sw::EventSystem& receiver;
+        core::ReportingContext reporting;
         // TODO: to make this public, implement invalidation and rollbacks (reset of collected)
         void finish();
     };

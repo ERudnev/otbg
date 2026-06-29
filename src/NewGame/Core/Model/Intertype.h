@@ -9,6 +9,7 @@
 #include "NewGame/Core/Meta/TypeId.h"
 #include "NewGame/Core/Model/Linear.h"
 #include "NewGame/Core/Operations/ContextData.h"
+#include "NewGame/Core/ReportingContext.h"
 
 namespace sw
 {
@@ -39,8 +40,8 @@ namespace swexp::core::model::intertype
             meta::StaticTypeId debugName;
             std::function<ref<core::model::linear::Erased>()> makeZeroLine;
             std::function<ref<core::model::linear::Erased>(const core::model::linear::Erased&)> cloneLine;
-            std::function<void(const ComplexState&, const ComplexState&, sw::EventSystem&)> callEmitters;
-            std::function<size_t(const ComplexState&, const ComplexState&, ComplexState&)> callReactions;
+            std::function<void(const ComplexState&, const ComplexState&, core::ReportingContext)> callEmitters;
+            std::function<size_t(const ComplexState&, const ComplexState&, ComplexState&, core::ReportingContext)> callReactions;
         };
 
         std::unordered_map<TypeId, TypeInfo> types;
@@ -59,18 +60,21 @@ namespace swexp::core::model::intertype
         using CallReactionsFn = std::function<size_t(
             const core::model::complex::State&,
             const core::model::complex::State&,
-            core::model::complex::State&)>;
+            core::model::complex::State&,
+            core::ReportingContext)>;
 
         return CallReactionsFn{
             [](
                 const core::model::complex::State& initial,
                 const core::model::complex::State& updated,
-                core::model::complex::State& adjustments)
+                core::model::complex::State& adjustments,
+                core::ReportingContext reporting)
             {
                 return Meta::Reactions::_generated_call_all(core::operations::ContextReactionsData{
-                    core::operations::ContextReadingData{initial},
-                    core::operations::ContextWritingData{const_cast<core::model::complex::State&>(updated)},
+                    core::operations::ContextReadingData{initial, reporting},
+                    core::operations::ContextWritingData{const_cast<core::model::complex::State&>(updated), reporting},
                     adjustments,
+                    reporting,
                 });
             }};
     }
@@ -81,18 +85,18 @@ namespace swexp::core::model::intertype
         using CallEmittersFn = std::function<void(
             const core::model::complex::State&,
             const core::model::complex::State&,
-            sw::EventSystem&)>;
+            core::ReportingContext)>;
 
         return CallEmittersFn{
             [](
                 const core::model::complex::State& begin,
                 const core::model::complex::State& end,
-                sw::EventSystem& listener)
+                core::ReportingContext reporting)
             {
                 Meta::Emitters::_generated_call_all(core::operations::ContextEmittersData{
-                    core::operations::ContextReadingData{begin},
-                    core::operations::ContextReadingData{end},
-                    listener,
+                    core::operations::ContextReadingData{begin, reporting},
+                    core::operations::ContextReadingData{end, reporting},
+                    reporting,
                 });
             }};
     }

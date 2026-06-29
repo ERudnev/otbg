@@ -57,18 +57,19 @@ namespace swexp::game
 		, state(schema)
 	{
 		currentTurn = 0;
+		actionsLastTurn = 1;
 		map = state.line<entity::Map>().createEntity({0,0});
 	}
 
 	void World::createMap(uint32_t width, uint32_t height)
 	{
-		Transaction tx(state, eventReceiver);
+		Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
 		map = with<entity::Map>::spawn(tx, {width, height});
 	}
 
 	void World::spawnSwordsman(UnitId id, const composition::Swordsman::Actions::SpawnParameters& parameters)
 	{
-		Transaction tx(state, eventReceiver);
+		Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
 		// check if caller wants to replace unit
 		//with<entity::Unit>::remove(state, id);
 		//core::operations::normalize(state);
@@ -81,7 +82,7 @@ namespace swexp::game
 		if (registered == registeredUnits.end())
 			return;
 
-		Transaction tx(state, eventReceiver);
+		Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
 		with<effect::OrderedToMove>::order(tx, *registered, target);
 	}
 
@@ -95,20 +96,19 @@ namespace swexp::game
 			return true;
 		}
 
-		// this implementation makes experimental model equal to initial test assignment model
-		// better add other "end game" criteria, or we will kill the world only because of
-		// all units taking rest :)
-		return state.line<effect::OrderedToMove>().elements.empty();
+		return currentTurn > 0 and actionsLastTurn == 0;
 	}
 
 	const std::vector<swexp::game::api::UnitId>& World::updatedList(std::vector<swexp::game::api::UnitId>& buffer)
 	{
-		buffer.clear();
-		buffer.reserve(registeredUnits.size());
+		const auto source = registeredUnits;
 
-		for (const auto unitId : registeredUnits)
+		buffer.clear();
+		buffer.reserve(source.size());
+
+		for (const auto unitId : source)
 		{
-			if (ask::exists<entity::Unit>(Reading{state}, unitId))
+			if (ask::exists<entity::Unit>(Reading{state, core::ReportingContext{currentTurn, &eventReceiver}}, unitId))
 				buffer.push_back(unitId);
 		}
 
@@ -118,6 +118,7 @@ namespace swexp::game
 	void World::step()
 	{
 		++currentTurn;
+		actionsLastTurn = 0;
 
 		// Phase 1: open transaction for the whole world tick.
 
@@ -126,8 +127,9 @@ namespace swexp::game
 		std::vector<UnitId> aliveUnits;
 		for (const auto unitId : updatedList(aliveUnits))
 		{
-			Transaction tx(state, eventReceiver);
-			with<entity::Unit>::makeTurn(tx, unitId);
+			Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
+			if (with<entity::Unit>::makeTurn(tx, unitId))
+				++actionsLastTurn;
 		}
 
 		// Phase 3: later this is a good place for world-owned post-processing.

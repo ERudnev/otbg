@@ -62,9 +62,9 @@ int main(int, char**)
             const tests::Strings grabbed = capture->lines();
             capture.reset();
 
-            const auto reports = tests::Usage::checkEqual(grabbed, scenario.expectations);
+            const auto report = tests::Usage::checkEqual(grabbed, scenario.expectations);
 
-            if (reports.empty())
+            if (report.mismatches.empty())
             {
                 std::cout << std::format(R"(OK: Scenario "{}")", name) << std::endl;
             }
@@ -72,9 +72,17 @@ int main(int, char**)
             {
                 ++failedCount;
                 std::cout << std::format(R"(FAIL: Scenario "{}")", name) << std::endl;
-                for (const auto& report : reports)
+
+                if (not report.matched.empty())
                 {
-                    std::cout << std::format("  {}", report) << std::endl;
+                    std::cout << "  matched events:" << std::endl;
+                    for (const auto& matched : report.matched)
+                        std::cout << std::format("    {}", matched) << std::endl;
+                }
+
+                for (const auto& mismatch : report.mismatches)
+                {
+                    std::cout << std::format("  {}", mismatch) << std::endl;
                 }
             }
         }
