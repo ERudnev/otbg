@@ -1,5 +1,6 @@
 #include "NewGame/Game/Effects/OrderedToMove.h"
 
+#include "Core/Manipulation/Helpers.h"
 #include "IO/interface.include.h"
 #include "NewGame/Core/Mechanism/Helpers.h"
 
@@ -57,12 +58,14 @@ namespace swexp::game::effect
 
         for (const auto id : swexp::core::mechanism::helpers::findDeleted<OrderedToMove>(initial, updated))
         {
-            const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
+            const auto unitState = ask::try_get<entity::Unit>(emitting.updated, id);
+            if (not unitState)
+                continue;
 
             emitting.listener.event(0, sw::io::MarchEnded{
                 .unitId = id,
-                .x = unitState.position.x,
-                .y = unitState.position.y,
+                .x = unitState->position.x,
+                .y = unitState->position.y,
             });
         }
     }

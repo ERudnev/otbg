@@ -8,13 +8,16 @@ namespace swexp::game::entity
 
     bool Unit::Actions::makeTurn(Writing writing, Id id)
     {
-        auto& unit = Get(writing, id);
-        if (unit.hitPoints == 0)
+        auto unit = ask::try_get<Unit>(writing, id);
+        if (not unit)
             return false;
 
-        if (not unit.turnStrategy)
+        if (unit->hitPoints == 0)
             return false;
 
-        return unit.turnStrategy(writing, id);
+        if (not unit->turnStrategy)
+            return false;
+
+        return unit->turnStrategy(writing, id);
     }
 }

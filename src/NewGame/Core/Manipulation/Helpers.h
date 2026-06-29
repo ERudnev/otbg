@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-#include <optional>
 #include <type_traits>
 
 #include "NewGame/Core/Model/Complex.h"
@@ -34,11 +32,11 @@ namespace swexp::core::manipulation {
 
     template<typename Meta>
     auto try_get(api::context::Reading, typename Meta::Id)
-        -> std::optional<std::reference_wrapper<const typename Meta::State>>;
+        -> const typename Meta::State*;
 
     template<typename Meta>
     auto try_get(api::context::Writing, typename Meta::Id)
-        -> std::optional<std::reference_wrapper<typename Meta::State>>;
+        -> typename Meta::State*;
 }
 
 // Impl
@@ -64,26 +62,26 @@ namespace swexp::core::manipulation {
 
     template<typename Meta>
     auto try_get(api::context::Reading context, typename Meta::Id id)
-        -> std::optional<std::reference_wrapper<const typename Meta::State>>
+        -> const typename Meta::State*
     {
         const auto& elements = context.state.template line<Meta>().elements;
         const auto item = elements.find(id);
         if (item == elements.end())
-            return std::nullopt;
+            return nullptr;
 
-        return std::cref(item->second);
+        return &item->second;
     }
 
     template<typename Meta>
     auto try_get(api::context::Writing context, typename Meta::Id id)
-        -> std::optional<std::reference_wrapper<typename Meta::State>>
+        -> typename Meta::State*
     {
         auto& elements = context.state.template line<Meta>().elements;
         const auto item = elements.find(id);
         if (item == elements.end())
-            return std::nullopt;
+            return nullptr;
 
-        return std::ref(item->second);
+        return &item->second;
     }
 }
 

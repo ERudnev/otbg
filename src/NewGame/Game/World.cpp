@@ -27,6 +27,7 @@
 
 namespace swexp::game
 {
+	namespace ask = ::swexp::core::manipulation;
 
 	// priate Schema init:
 	using namespace swexp::core::api;
@@ -63,7 +64,6 @@ namespace swexp::game
 	{
 		Transaction tx(state, eventReceiver);
 		map = with<entity::Map>::spawn(tx, {width, height});
-		_LOG_DEBUG_("created Map, waiting for Scoped Transactions emit message...");
 	}
 
 	void World::spawnSwordsman(UnitId id, const composition::Swordsman::Actions::SpawnParameters& parameters)
@@ -77,7 +77,7 @@ namespace swexp::game
 
 	void World::march(UnitId externalUnitId, Position target)
 	{
-		const auto registered = std::ranges::find(registeredUnits, externalUnitId);
+		const auto registered = std::ranges::find(updatedList(registeredUnits), externalUnitId);
 		if (registered == registeredUnits.end())
 			return;
 
@@ -101,17 +101,34 @@ namespace swexp::game
 		return state.line<effect::OrderedToMove>().elements.empty();
 	}
 
+	const std::vector<swexp::game::api::UnitId>& World::updatedList(std::vector<swexp::game::api::UnitId>& buffer)
+	{
+		buffer.clear();
+		buffer.reserve(registeredUnits.size());
+
+		for (const auto unitId : registeredUnits)
+		{
+			if (ask::exists<entity::Unit>(Reading{state}, unitId))
+				buffer.push_back(unitId);
+		}
+
+		return buffer;
+	}
+
 	void World::step()
 	{
 		++currentTurn;
 
 		// Phase 1: open transaction for the whole world tick.
-		Transaction tx(state, eventReceiver);
 
 		// Phase 2: let every registered unit spend its own turn strategy.
 		// The world is responsible only for the order of dispatch.
-		for (const auto unitId : registeredUnits)
+		std::vector<UnitId> aliveUnits;
+		for (const auto unitId : updatedList(aliveUnits))
+		{
+			Transaction tx(state, eventReceiver);
 			with<entity::Unit>::makeTurn(tx, unitId);
+		}
 
 		// Phase 3: later this is a good place for world-owned post-processing.
 		// Examples: cleanup of dead references, global effects, turn-wide rules.

@@ -58,22 +58,24 @@ namespace swexp::game::composition
         }
 
         auto unit = ask::try_get<entity::Unit>(writing, id);
+        if (not unit)
+            return false;
 
         // Swordsman policy matches the reference world: attack adjacent live targets before moving.
         std::vector<uint32_t> targetUnitIds;
-        entity::Map::Actions::findTargets(writing, mapId, id, unit->get().position, targetUnitIds);
+        entity::Map::Actions::findTargets(writing, mapId, id, unit->position, targetUnitIds);
 
         for (const auto targetUnitId : targetUnitIds)
         {
             auto target = ask::try_get<entity::Unit>(writing, targetUnitId);
-            if (not target or target->get().hitPoints == 0)
+            if (not target or target->hitPoints == 0)
                 continue;
 
             if (not ability::Rending::Actions::tryApply(writing, id, targetUnitId))
                 ability::MeleeAttack::Actions::attack(writing, id, targetUnitId);
 
             target = ask::try_get<entity::Unit>(writing, targetUnitId);
-            if (target and target->get().hitPoints == 0)
+            if (target and target->hitPoints == 0)
                 writing.state.line<entity::Unit>().elements.erase(targetUnitId);
 
             return true;
@@ -84,12 +86,12 @@ namespace swexp::game::composition
         if (not order)
             return false;
 
-        const auto targetPosition = order->get().targetPosition;
+        const auto targetPosition = order->targetPosition;
         entity::Map::Position nextPosition;
-        if (entity::Map::Actions::tryGetNextPosition(writing, mapId, unit->get().position, targetPosition, nextPosition))
-            unit->get().position = nextPosition;
+        if (entity::Map::Actions::tryGetNextPosition(writing, mapId, unit->position, targetPosition, nextPosition))
+            unit->position = nextPosition;
 
-        if (unit->get().position == targetPosition)
+        if (unit->position == targetPosition)
             writing.state.line<effect::OrderedToMove>().elements.erase(id);
 
         // Order existed, so the unit spent its turn even if the step was blocked.
