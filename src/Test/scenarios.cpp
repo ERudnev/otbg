@@ -34,6 +34,43 @@ namespace tests
                     "[4] UNIT_DIED unitId=1 ",
                 },
             }},
+            {"hunter_melee_blocks_ranged", Scenario{
+                .commands = {
+                    "CREATE_MAP 10 10",
+                    "SPAWN_HUNTER 1 5 5 10 4 2 5 0 5",
+                    "SPAWN_SWORDSMAN 2 5 6 5 1 0 0",
+                    "SPAWN_SWORDSMAN 3 5 9 8 1 0 0",
+                },
+                .expectations = {
+                    "[0] MAP_CREATED width=10 height=10 ",
+                    "[0] UNIT_SPAWNED unitId=1 unitType=hunter x=5 y=5 ",
+                    "[0] UNIT_SPAWNED unitId=2 unitType=swordsman x=5 y=6 ",
+                    "[0] UNIT_SPAWNED unitId=3 unitType=swordsman x=5 y=9 ",
+                    "[1] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=2 targetHp=3 ",
+                    "[1] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=9 ",
+                    "[2] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=2 targetHp=1 ",
+                    "[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=8 ",
+                    "[3] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=2 targetHp=0 ",
+                    "[3] UNIT_DIED unitId=2 ",
+                    "[4] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=4 targetHp=4 ",
+                    "[5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=4 targetHp=0 ",
+                    "[5] UNIT_DIED unitId=3 ",
+                },
+            }},
+            {"hunter_poison_kills_after_death", Scenario{
+                .commands = {
+                    "CREATE_MAP 10 10",
+                    "SPAWN_HUNTER 1 5 5 3 1 1 3 1000 5",
+                    "SPAWN_SWORDSMAN 2 5 7 4 10 0 0",
+                    "MARCH 2 5 5",
+                },
+                .expectations = {
+                    "UNIT_DIED unitId=1 ",
+                    "UNIT_DIED unitId=2 ",
+                },
+                .allowUnexpectedActualEvents = true,
+                .allowExpectationSubstrings = true,
+            }},
         };
     }
 
@@ -197,9 +234,10 @@ namespace tests
         };
     }
 
-    CheckReport Usage::checkEqual(const Strings& reports, const Strings& expectations)
+    CheckReport Usage::checkEqual(const Strings& reports, const Scenario& scenario)
     {
         CheckReport result;
+        const auto& expectations = scenario.expectations;
 
         std::vector<bool> matchedReports(reports.size(), false);
 
@@ -207,10 +245,16 @@ namespace tests
         {
             const auto match = std::ranges::find_if(
                     reports,
-                    [&expected, &matchedReports, &reports](const std::string& actual)
+                    [&expected, &matchedReports, &reports, &scenario](const std::string& actual)
                     {
                         const size_t index = static_cast<size_t>(&actual - reports.data());
-                        return !matchedReports[index] && actual == expected;
+                        if (matchedReports[index])
+                            return false;
+
+                        if (scenario.allowExpectationSubstrings)
+                            return actual.find(expected) != std::string::npos;
+
+                        return actual == expected;
                     });
 
             if (match == reports.end())
@@ -225,6 +269,9 @@ namespace tests
             matchedReports[matchedIndex] = true;
             result.matched.push_back(expected);
         }
+
+        if (scenario.allowUnexpectedActualEvents)
+            return result;
 
         for (size_t index = 0; index < reports.size(); ++index)
         {

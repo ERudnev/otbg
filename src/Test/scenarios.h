@@ -16,6 +16,8 @@ namespace tests {
         using Id = std::string;
         Strings commands;
         Strings expectations;
+        bool allowUnexpectedActualEvents{false};
+        bool allowExpectationSubstrings{false};
     };
 
     struct CheckReport {
@@ -26,7 +28,7 @@ namespace tests {
     struct Usage {
         static Bucket generateScenarios();
         static Bucket generateNewScenarios();
-        static CheckReport checkEqual(const Strings& reports, const Strings& expectations);
+        static CheckReport checkEqual(const Strings& reports, const Scenario& scenario);
 
     };
 }

@@ -13,9 +13,11 @@ namespace swexp::game::effect
         struct State {
             entity::Unit::Id applier;
             Damage damage;
+            uint32_t remainingTurns;
         };
 
         struct Actions final : BaseActions {
+            static size_t updateEffect(Writing);
         };
 
         struct Reactions final : BaseReactions {

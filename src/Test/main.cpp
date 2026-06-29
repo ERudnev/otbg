@@ -72,7 +72,7 @@ int main(int, char**)
             const tests::Strings grabbed = capture->lines();
             capture.reset();
 
-            const auto report = tests::Usage::checkEqual(grabbed, scenario.expectations);
+            const auto report = tests::Usage::checkEqual(grabbed, scenario);
 
             if (report.mismatches.empty())
             {

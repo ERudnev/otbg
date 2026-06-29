@@ -121,12 +121,24 @@ namespace swexp::game
 		return buffer;
 	}
 
+	size_t World::updateEffects(Writing writing)
+	{
+		size_t updatedEffects = 0;
+		updatedEffects += with<effect::Poisoned>::updateEffect(writing);
+		updatedEffects += with<effect::Rended>::updateEffect(writing);
+		return updatedEffects;
+	}
+
 	void World::step()
 	{
 		++currentTurn;
 		actionsLastTurn = 0;
 
-		// Phase 1: open transaction for the whole world tick.
+		// Phase 1: update existing effects
+		{
+			Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
+			actionsLastTurn += updateEffects(tx);
+		}
 
 		// Phase 2: let every registered unit spend its own turn strategy.
 		// The world is responsible only for the order of dispatch.
