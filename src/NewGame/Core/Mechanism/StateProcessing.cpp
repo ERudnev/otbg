@@ -5,9 +5,9 @@
 
 namespace swexp::core::mechanism
 {
-    StateProcessing::NormalizationSummary StateProcessing::normalize(const State& in, State& out)
+    StateProcessing::NormalizationSummary StateProcessing::normalize(const State& initial, const State& updated, State& reactions)
     {
-        _INCOMPLETE_;
+        _LOG_DEBUG_("skipped");
     }
 
     StateProcessing::EmittersSummary StateProcessing::emitEvents(

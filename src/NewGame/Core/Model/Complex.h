@@ -12,6 +12,9 @@ namespace swexp::core::model::complex
         State(Schema schema);
         State(const State& other);
 
+        // TODO: repace this with "applyPatch" for much better performance
+        void applyFrom(const State& other);
+
         Schema getSchema() const { return schema; }
 
         template<typename Meta>

@@ -29,7 +29,7 @@ namespace swexp::core::mechanism
         operator Writing() { return Writing{collected}; }
 
     private:
-        const State& state;
+        State& state;
         State collected;
         sw::EventSystem& receiver;
         // TODO: to make this public, implement invalidation and rollbacks (reset of collected)

@@ -29,6 +29,9 @@ namespace swexp::core::model::linear
         template<typename ParentType>
         void createComponent(typename ParentType::Id, ElementState&&);
 
+        template<typename ParentType>
+        void createOrUpdateComponent(typename ParentType::Id, ElementState&&);
+
     private:
         ElementId createNewItem(ElementId, ElementState&&);
     };
@@ -48,6 +51,17 @@ namespace swexp::core::model::linear
     void State<Meta>::createComponent(typename ParentType::Id parentId, ElementState&& item)
     {
         createNewItem(static_cast<ElementId>(parentId), std::move(item));
+    }
+
+    template<typename Meta>
+    template<typename ParentType>
+    void State<Meta>::createOrUpdateComponent(typename ParentType::Id parentId, ElementState&& item)
+    {
+        const ElementId id = static_cast<ElementId>(parentId);
+        if (const auto existing = elements.find(id); existing != elements.end())
+            existing->second = std::move(item);
+        else
+            elements.emplace(id, std::move(item));
     }
 
     template<typename Meta>

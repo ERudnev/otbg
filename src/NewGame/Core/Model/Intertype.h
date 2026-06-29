@@ -4,7 +4,6 @@
 
 #include <functional>
 #include <string>
-#include <type_traits>
 #include <unordered_map>
 #include "NewGame/Core/References.h"
 #include "NewGame/Core/Meta/TypeId.h"
@@ -33,13 +32,15 @@ namespace swexp::core::model::intertype
 
     struct SchemaData {
         struct TypeInfo {
+            using ComplexState = core::model::complex::State;
             // TODO: if you need type dependency graph, put your data here..
             // like "std::vector<TypeId> requiredTypes"
 
             meta::StaticTypeId debugName;
             std::function<ref<core::model::linear::Erased>()> makeZeroLine;
             std::function<ref<core::model::linear::Erased>(const core::model::linear::Erased&)> cloneLine;
-            std::function<void(const core::model::complex::State&, const core::model::complex::State&, sw::EventSystem&)> callEmitters;
+            std::function<void(const ComplexState&, const ComplexState&, sw::EventSystem&)> callEmitters;
+            std::function<void(const ComplexState&, const ComplexState&, ComplexState&)> callReactions;
         };
 
         std::unordered_map<TypeId, TypeInfo> types;
@@ -52,47 +53,26 @@ namespace swexp::core::model::intertype
 
 namespace swexp::core::model::intertype
 {
-    namespace detail
+    template<typename Meta>
+    auto makeCallEmitters()
     {
-        template<typename Meta, typename = void>
-        struct has_generated_call_all : std::false_type {};
-
-        template<typename Meta>
-        struct has_generated_call_all<
-            Meta,
-            std::void_t<decltype(&Meta::Emitters::_generated_call_all)>>
-            : std::true_type {};
-
-        template<typename Meta>
-        inline constexpr bool has_generated_call_all_v = has_generated_call_all<Meta>::value;
-
         using CallEmittersFn = std::function<void(
             const core::model::complex::State&,
             const core::model::complex::State&,
             sw::EventSystem&)>;
 
-        template<typename Meta>
-        CallEmittersFn makeCallEmitters()
-        {
-            if constexpr (has_generated_call_all_v<Meta>)
+        return CallEmittersFn{
+            [](
+                const core::model::complex::State& begin,
+                const core::model::complex::State& end,
+                sw::EventSystem& listener)
             {
-                return [](
-                    const core::model::complex::State& begin,
-                    const core::model::complex::State& end,
-                    sw::EventSystem& listener)
-                {
-                    Meta::Emitters::_generated_call_all(core::operations::ContextEmittersData{
-                        core::operations::ContextReadingData{begin},
-                        core::operations::ContextReadingData{end},
-                        listener,
-                    });
-                };
-            }
-            else
-            {
-                return {};
-            }
-        }
+                Meta::Emitters::_generated_call_all(core::operations::ContextEmittersData{
+                    core::operations::ContextReadingData{begin},
+                    core::operations::ContextReadingData{end},
+                    listener,
+                });
+            }};
     }
 
     template<typename Meta>
@@ -120,7 +100,7 @@ namespace swexp::core::model::intertype
                     .debugName = core::meta::debugName<Types>(),
                     .makeZeroLine = &makeZeroLine<Types>,
                     .cloneLine = &cloneLine<Types>,
-                    .callEmitters = detail::makeCallEmitters<Types>(),
+                    .callEmitters = makeCallEmitters<Types>(),
                 }),
             ...);
 

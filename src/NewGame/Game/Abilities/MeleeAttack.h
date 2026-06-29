@@ -18,6 +18,7 @@ namespace swexp::game::ability
         };
 
         struct Emitters final : BaseEmitters {
+            static void _generated_call_all(Emitting) {}
         };
     };
 }

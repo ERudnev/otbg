@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "NewGame/Core/Interface/features.api.h"
 #include "NewGame/Game/Abilities/Rending.h"
 #include "NewGame/Game/Entities/Unit.h"
@@ -13,16 +15,8 @@ namespace swexp::game::composition
 
     struct Swordsman : Composition<Swordsman, entity::Unit> {
         struct State {
-            // placeholder
-            //std::string name;
-            // TODO: cleanup this comments before release
-
-            // not needed: eing Extension of Unit has own Id value == Unit' Id value
-            // Unit::Id unit;
-
-            // same (Transitivity) ability::Movement::Id movement;
-            // same (Transitivity) ability::MeleeAttack::Id meleeAttack;
-            // same (Transitivity) ability::Rending::Id rending;
+            std::string name;
+            // if you want control your abilities, skill levels, e.t.x. - add parameters here!
         };
 
         struct Actions final : BaseActions {
@@ -39,6 +33,8 @@ namespace swexp::game::composition
         };
 
         struct Emitters final : BaseEmitters {
+            static void _generated_call_all(Emitting);
+            static void unitSpawned(Emitting);
         };
     };
 }

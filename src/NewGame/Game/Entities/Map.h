@@ -15,6 +15,8 @@ namespace swexp::game::entity
         {
             uint32_t x{0};
             uint32_t y{0};
+
+            friend bool operator==(const Position&, const Position&) = default;
         };
 
         struct State {
@@ -28,7 +30,7 @@ namespace swexp::game::entity
         };
 
         struct Emitters final : BaseEmitters {
-            static void _generated_call_all(Emitting emitting);
+            static void _generated_call_all(Emitting);
             static void mapCreated(Emitting emitting);
         };
     };

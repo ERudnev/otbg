@@ -66,8 +66,5 @@ namespace swexp::game
 		using Reading = core::api::context::Reading;
         using Writing = core::api::context::Writing;
 		using Transaction = core::mechanism::ScopedTransaction;
-
-		// details:
-		void normalize();
 	};
 }

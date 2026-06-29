@@ -11,6 +11,8 @@ namespace swexp::game::entity
         using HitPoints = uint32_t;
 
         struct State {
+            // this is dirty hack: store external Id for reporting. Reactor this later (provide mappings with Emitting Context)
+            uint32_t publicUnitId_placeholder;
             Map::Position position;
             HitPoints hitPoints;
         };
@@ -21,6 +23,7 @@ namespace swexp::game::entity
         };
 
         struct Emitters final : BaseEmitters {
+            static void _generated_call_all(Emitting) {}
         };
     };
 }

@@ -10,6 +10,6 @@ namespace swexp::core::mechanism
     {
         // call all normalization for (state->collected)
         StateProcessing::emitEvents(state, collected, receiver);
-        // emit found Enents
+        state.applyFrom(collected);
     }
 }

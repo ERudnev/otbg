@@ -19,6 +19,7 @@ namespace swexp::game::effect
         };
 
         struct Emitters final : BaseEmitters {
+            static void _generated_call_all(Emitting) {}
         };
     };
 }

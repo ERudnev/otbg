@@ -57,11 +57,6 @@ namespace swexp::game
 		map = state.line<entity::Map>().createEntity({0,0});
 	}
 
-	void World::normalize()
-	{
-		//const auto results = core::operations::Normalizer::repair(state);
-	}
-
 	void World::createMap(uint32_t width, uint32_t height)
 	{
 		Transaction tx(state, eventReceiver);
@@ -78,9 +73,14 @@ namespace swexp::game
 		registeredUnits[id] = with<composition::Swordsman>::spawn(tx, parameters);
 	}
 
-	void World::march(uint32_t, Position)
+	void World::march(UnitId externalUnitId, Position target)
 	{
-		_INCOMPLETE_;
+		const auto registered = registeredUnits.find(externalUnitId);
+		if (registered == registeredUnits.end())
+			return;
+
+		Transaction tx(state, eventReceiver);
+		with<effect::OrderedToMove>::order(tx, registered->second, target);
 	}
 
 	bool World::isGameOver() const

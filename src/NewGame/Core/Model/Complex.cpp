@@ -21,6 +21,25 @@ namespace swexp::core::model::complex
         }
     }
 
+    void State::applyFrom(const State& other)
+    {
+        if (schema != other.schema)
+        {
+            throw std::bad_cast();
+        }
+
+        for (const auto& [typeId, otherLine] : other.lines)
+        {
+            const auto type = schema->types.find(typeId);
+            if (type == schema->types.end())
+            {
+                throw std::bad_cast();
+            }
+
+            lines[typeId] = type->second.cloneLine(*otherLine);
+        }
+    }
+
     void State::fillZeroState()
     {
         for (const auto& [typeId, type] : schema->types)
