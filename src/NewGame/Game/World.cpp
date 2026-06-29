@@ -129,6 +129,13 @@ namespace swexp::game
 		return updatedEffects;
 	}
 
+	size_t World::applyEffects(Writing writing)
+	{
+		size_t applied = 0;
+		applied += with<effect::Poisoned>::applyEffect(writing);
+		return applied;
+	}
+
 	void World::step()
 	{
 		++currentTurn;
@@ -151,6 +158,11 @@ namespace swexp::game
 		}
 
 		// Phase 3: later this is a good place for world-owned post-processing.
+		{
+			Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
+			actionsLastTurn += applyEffects(tx);
+		}
+
 		// Examples: cleanup of dead references, global effects, turn-wide rules.
 
 		// Phase 4: transaction destructor will normalize state and emit events.

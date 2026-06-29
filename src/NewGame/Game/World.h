@@ -71,6 +71,7 @@ namespace swexp::game
 		using Transaction = core::mechanism::ScopedTransaction;
 
 		size_t updateEffects(Writing);
+		size_t applyEffects(Writing);
 		const std::vector<swexp::game::api::UnitId>& updatedList(std::vector<swexp::game::api::UnitId>&);
 	};
 }

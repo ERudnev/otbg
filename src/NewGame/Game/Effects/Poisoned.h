@@ -18,6 +18,7 @@ namespace swexp::game::effect
 
         struct Actions final : BaseActions {
             static size_t updateEffect(Writing);
+            static size_t applyEffect(Writing);
         };
 
         struct Reactions final : BaseReactions {
