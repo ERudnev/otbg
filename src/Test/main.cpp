@@ -35,7 +35,8 @@ int main(int, char**)
                         world.spawnSwordsman(
                                 command.unitId,
                                 game::composition::Swordsman::Actions::SpawnParameters{
-                                        .unit = {command.unitId,{command.x, command.y}, command.hp},
+                                        .externalId = command.unitId,
+                                        .unit = {{command.x, command.y}, command.hp},
                                         .melee = {.strength = command.strength},
                                         .rending = {.chance = command.chance, .damage = command.rending},
                                 });

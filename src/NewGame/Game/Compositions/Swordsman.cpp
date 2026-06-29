@@ -1,6 +1,7 @@
 #include "NewGame/Game/Compositions/Swordsman.h"
 
 #include <format>
+#include <stdexcept>
 
 #include "IO/interface.include.h"
 #include "NewGame/Core/Mechanism/Helpers.h"
@@ -11,12 +12,16 @@
 
 namespace swexp::game::composition
 {
+    namespace ask = ::swexp::core::manipulation;
+
     entity::Unit::Id Swordsman::Actions::spawn(Writing writing, const SpawnParameters& parameters)
     {
         auto& draft = writing.state;
 
-        const entity::Unit::Id unitId = draft.line<entity::Unit>().createEntity(
-            entity::Unit::State{parameters.unit});
+        const entity::Unit::Id unitId = parameters.externalId;
+        const auto [_, inserted] = draft.line<entity::Unit>().elements.try_emplace(unitId, entity::Unit::State{parameters.unit});
+        if (!inserted)
+            throw std::logic_error("Swordsman::Actions::spawn: duplicate unit id");
 
         draft.line<ability::LandMovement>().createComponent<entity::Unit>(unitId, {});
         draft.line<ability::MeleeAttack>().createComponent<entity::Unit>(
@@ -43,10 +48,10 @@ namespace swexp::game::composition
 
         for (const auto id : swexp::core::mechanism::helpers::findAdded<Swordsman>(initial, updated))
         {
-            const auto& unitState = updated.line<entity::Unit>().elements.at(id);
+            const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
 
             emitting.listener.event(0, sw::io::UnitSpawned{
-                .unitId = unitState.publicUnitId_placeholder,
+                .unitId = id,
                 .unitType = "swordsman",
                 .x = unitState.position.x,
                 .y = unitState.position.y,

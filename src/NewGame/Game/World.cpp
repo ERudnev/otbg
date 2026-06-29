@@ -20,6 +20,7 @@
 #include "NewGame/Game/Effects/Rended.h"
 #include "NewGame/Game/Entities/Map.h"
 #include "NewGame/Game/Entities/Unit.h"
+#include <algorithm>
 #include <memory>
 #include <stdexcept>
 
@@ -71,17 +72,17 @@ namespace swexp::game
 		// check if caller wants to replace unit
 		//with<entity::Unit>::remove(state, id);
 		//core::operations::normalize(state);
-		registeredUnits[id] = with<composition::Swordsman>::spawn(tx, parameters);
+		registeredUnits.push_back(with<composition::Swordsman>::spawn(tx, parameters));
 	}
 
 	void World::march(UnitId externalUnitId, Position target)
 	{
-		const auto registered = registeredUnits.find(externalUnitId);
+		const auto registered = std::ranges::find(registeredUnits, externalUnitId);
 		if (registered == registeredUnits.end())
 			return;
 
 		Transaction tx(state, eventReceiver);
-		with<effect::OrderedToMove>::order(tx, registered->second, target);
+		with<effect::OrderedToMove>::order(tx, *registered, target);
 	}
 
 	bool World::isGameOver() const

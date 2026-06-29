@@ -17,6 +17,7 @@ namespace swexp::game::ability
         };
 
         struct Actions final : BaseActions {
+            static bool tryApply(Writing, Id applierId, entity::Unit::Id targetId);
         };
 
         struct Reactions final : BaseReactions {

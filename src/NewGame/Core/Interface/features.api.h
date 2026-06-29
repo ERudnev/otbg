@@ -29,4 +29,7 @@ namespace swexp::core::api {
     template<typename Meta>
     using with = ::swexp::core::manipulation::call<Meta>;
 
+    // Allow users shorcut to getters:
+    namespace ask = ::swexp::core::manipulation;
+
 }

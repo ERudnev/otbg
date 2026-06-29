@@ -3,6 +3,7 @@
 #include <string>
 
 #include "NewGame/Core/Interface/features.api.h"
+#include "NewGame/Game/_types.exports.h"
 #include "NewGame/Game/Abilities/Rending.h"
 #include "NewGame/Game/Entities/Unit.h"
 #include "NewGame/Game/Abilities/LandMovement.h"
@@ -21,6 +22,7 @@ namespace swexp::game::composition
 
         struct Actions final : BaseActions {
             struct SpawnParameters {
+                ::swexp::game::api::UnitId externalId;
                 entity::Unit::State unit;
                 ability::MeleeAttack::State melee;
                 ability::Rending::State rending;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <vector>
 
 #include "NewGame/Core/Operations/_forwards.h"
 #include "NewGame/Core/Mechanism/ScopedTransaction.h"
@@ -59,7 +59,7 @@ namespace swexp::game
 		// own state:
 		Turn currentTurn{0};
         entity::Map::Id map;
-		std::map<UnitId, entity::Unit::Id> registeredUnits;
+		std::vector<UnitId> registeredUnits;
 
 		// private using as bringe to Entity::Actions interface
 		// this makes World as "Entity with Actions"

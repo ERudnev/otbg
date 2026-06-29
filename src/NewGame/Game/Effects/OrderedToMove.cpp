@@ -5,6 +5,8 @@
 
 namespace swexp::game::effect
 {
+    namespace ask = ::swexp::core::manipulation;
+
     OrderedToMove::Reactions::Summary OrderedToMove::Reactions::_generated_call_all(Reacting reacting)
     {
         return _category_default_reactions(reacting)
@@ -35,11 +37,11 @@ namespace swexp::game::effect
 
         for (const auto id : swexp::core::mechanism::helpers::findAddedOrUpdated<OrderedToMove>(initial, updated))
         {
-            const auto& unitState = updated.line<entity::Unit>().elements.at(id);
-            const auto& orderState = updated.line<OrderedToMove>().elements.at(id);
+            const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
+            const auto& orderState = ask::get<OrderedToMove>(emitting.updated, id);
 
             emitting.listener.event(0, sw::io::MarchStarted{
-                .unitId = unitState.publicUnitId_placeholder,
+                .unitId = id,
                 .x = unitState.position.x,
                 .y = unitState.position.y,
                 .targetX = orderState.targetPosition.x,
@@ -55,10 +57,10 @@ namespace swexp::game::effect
 
         for (const auto id : swexp::core::mechanism::helpers::findDeleted<OrderedToMove>(initial, updated))
         {
-            const auto& unitState = updated.line<entity::Unit>().elements.at(id);
+            const auto& unitState = ask::get<entity::Unit>(emitting.updated, id);
 
             emitting.listener.event(0, sw::io::MarchEnded{
-                .unitId = unitState.publicUnitId_placeholder,
+                .unitId = id,
                 .x = unitState.position.x,
                 .y = unitState.position.y,
             });

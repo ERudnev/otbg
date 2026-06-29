@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "NewGame/Core/Interface/features.api.h"
 
 // Root-level Game Logic types
@@ -27,6 +29,10 @@ namespace swexp::game::entity
         };
         struct Actions final : BaseActions {
             static auto spawn(Writing, const State&)->Id;
+            static void findTargets(Reading, Id, uint32_t currentUnitId, Position currentPosition, std::vector<uint32_t>& outUnitIds);
+            static bool tryGetNextPosition(Reading, Id, Position currentPosition, Position targetPosition, Position& outPosition);
+        private:
+            static bool isPositionFree(Reading, Id, Position);
         };
 
         struct Reactions final : BaseReactions {
