@@ -1,14 +1,15 @@
-#include "Game/World.hpp"
-#include "Game/InjectedRandomDevice.h"
+#include "NewGame/interface.include.h"
 #include "IO/interface.include.h"
 
 #include <fstream>
+#include <stdexcept>
 
 int main(int argc, char** argv)
 {
 	using namespace sw;
+	using namespace swexp;
 
-	game::InjectedRandomDevice::init();
+	swexp::core::interface::InjectedRandomDevice::init();
 
 	if (argc != 2)
 	{
@@ -29,18 +30,29 @@ int main(int argc, char** argv)
 	parser.add<io::SpawnSwordsman>(
 			[&world](auto command)
 			{
-				world.spawnUnit(
+				world.spawnSwordsman(
 						command.unitId,
-						{command.x, command.y},
-						command.hp,
-						command.strength,
-						command.chance,
-						command.rending);
+						game::composition::Swordsman::Actions::SpawnParameters{
+								.externalId = command.unitId,
+								.position = {command.x, command.y},
+								.hitPoints = command.hp,
+								.melee = {.strength = command.strength},
+								.rending = {.chance = command.chance, .damage = command.rending},
+						});
 			});
 	parser.add<io::SpawnHunter>(
-			[](auto command)
+			[&world](auto command)
 			{
-				//TODO
+				world.spawnHunter(
+						command.unitId,
+						game::composition::Hunter::Actions::SpawnParameters{
+								.externalId = command.unitId,
+								.position = {command.x, command.y},
+								.hitPoints = command.hp,
+								.ranged = {.minRange = 2, .maxRange = command.range, .damage = command.agility},
+								.melee = {.strength = command.strength},
+								.poisonArrows = {.chance = command.chance, .damage = command.poison, .duration = 5},
+						});
 			});
 	parser.add<io::March>([&world](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); });
 

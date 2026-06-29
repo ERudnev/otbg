@@ -2,7 +2,7 @@ file(GLOB_RECURSE MODULE_SOURCES CONFIGURE_DEPENDS *.cpp *.hpp)
 
 add_executable(sw_battle_test ${MODULE_SOURCES})
 
-target_link_libraries(sw_battle_test PRIVATE game)
+target_link_libraries(sw_battle_test PRIVATE NewGame io)
 
 set_target_properties(sw_battle_test PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
