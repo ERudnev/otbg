@@ -8,11 +8,11 @@
 // TODO: convert World to private-implemented to avoid of this includes
 #include "NewGame/Core/Model/Complex.h"
 // Logic layer
-#include "NewGame/Game/_types.exports.h"
+#include "NewGame/Features/_types.exports.h"
 
 // this include must be removed with SpawnType exported
-#include "NewGame/Game/Compositions/Hunter.h"
-#include "NewGame/Game/Compositions/Swordsman.h"
+#include "NewGame/Features/Compositions/Hunter.h"
+#include "NewGame/Features/Compositions/Swordsman.h"
 
 namespace sw
 {

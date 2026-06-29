@@ -4,22 +4,22 @@
 #include "Core/Mechanism/StateProcessing.h"
 #include "IO/interface.include.h"
 #include "NewGame/Core/Interface/macros.h"
-#include "NewGame/Game/World.h"
+#include "NewGame/World.h"
 
 // TODO: moe to dedicated "my schema" file...
 // To build Schema
-#include "NewGame/Game/Abilities/LandMovement.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/PoisonArrows.h"
-#include "NewGame/Game/Abilities/RangedAttack.h"
-#include "NewGame/Game/Abilities/Rending.h"
-#include "NewGame/Game/Compositions/Hunter.h"
-#include "NewGame/Game/Compositions/Swordsman.h"
-#include "NewGame/Game/Effects/OrderedToMove.h"
-#include "NewGame/Game/Effects/Poisoned.h"
-#include "NewGame/Game/Effects/Rended.h"
-#include "NewGame/Game/Entities/Map.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Abilities/LandMovement.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/PoisonArrows.h"
+#include "NewGame/Features/Abilities/RangedAttack.h"
+#include "NewGame/Features/Abilities/Rending.h"
+#include "NewGame/Features/Compositions/Hunter.h"
+#include "NewGame/Features/Compositions/Swordsman.h"
+#include "NewGame/Features/Effects/OrderedToMove.h"
+#include "NewGame/Features/Effects/Poisoned.h"
+#include "NewGame/Features/Effects/Rended.h"
+#include "NewGame/Features/Entities/Map.h"
+#include "NewGame/Features/Entities/Unit.h"
 #include <algorithm>
 #include <memory>
 #include <stdexcept>

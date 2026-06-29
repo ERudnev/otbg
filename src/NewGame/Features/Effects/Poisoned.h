@@ -1,23 +1,24 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Entities/Unit.h"
 
-namespace swexp::game::ability
+namespace swexp::game::effect
 {
     using namespace swexp::core::api;
 
-    struct Rending : Extension<Rending, entity::Unit> {
-        using Chance = uint32_t;
-        using Amount = entity::Unit::HitPoints;
+    struct Poisoned : Effect<Poisoned, entity::Unit> {
+        using Damage = entity::Unit::HitPoints;
 
         struct State {
-            Chance chance;
-            Amount damage;
+            entity::Unit::Id applier;
+            Damage damageBudgetRemaining;
+            uint32_t remainingTurns;
         };
 
         struct Actions final : BaseActions {
-            static bool tryApply(Writing, Id applierId, entity::Unit::Id targetId);
+            static size_t updateEffect(Writing);
+            static size_t applyEffect(Writing);
         };
 
         struct Reactions final : BaseReactions {

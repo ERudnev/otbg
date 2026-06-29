@@ -3,12 +3,12 @@
 #include <string>
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/_types.exports.h"
-#include "NewGame/Game/Abilities/Rending.h"
-#include "NewGame/Game/Entities/Unit.h"
-#include "NewGame/Game/Abilities/LandMovement.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/Rending.h"
+#include "NewGame/Features/_types.exports.h"
+#include "NewGame/Features/Abilities/Rending.h"
+#include "NewGame/Features/Entities/Unit.h"
+#include "NewGame/Features/Abilities/LandMovement.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/Rending.h"
 
 namespace swexp::game::composition
 {

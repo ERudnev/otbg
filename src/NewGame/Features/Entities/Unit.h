@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/Entities/Map.h"
+#include "NewGame/Features/Entities/Map.h"
 
 namespace swexp::game::entity
 {

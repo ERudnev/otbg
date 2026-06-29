@@ -1,15 +1,15 @@
-#include "NewGame/Game/Compositions/Swordsman.h"
+#include "NewGame/Features/Compositions/Swordsman.h"
 
 #include <format>
 #include <stdexcept>
 
 #include "IO/interface.include.h"
 #include "NewGame/Core/Mechanism/Helpers.h"
-#include "NewGame/Game/Abilities/LandMovement.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/Rending.h"
-#include "NewGame/Game/Effects/OrderedToMove.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Abilities/LandMovement.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/Rending.h"
+#include "NewGame/Features/Effects/OrderedToMove.h"
+#include "NewGame/Features/Entities/Unit.h"
 
 namespace swexp::game::composition
 {

@@ -1,9 +1,9 @@
-#include "NewGame/Game/Abilities/Rending.h"
+#include "NewGame/Features/Abilities/Rending.h"
 
 #include "IO/interface.include.h"
 #include "NewGame/Core/Interface/InjectedRandomDevice.h"
 #include "NewGame/Core/Manipulation/Helpers.h"
-#include "NewGame/Game/Effects/Rended.h"
+#include "NewGame/Features/Effects/Rended.h"
 
 namespace swexp::game::ability
 {

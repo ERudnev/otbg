@@ -1,11 +1,11 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/Entities/Unit.h"
-#include "NewGame/Game/Abilities/LandMovement.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/RangedAttack.h"
-#include "NewGame/Game/Abilities/PoisonArrows.h"
+#include "NewGame/Features/Entities/Unit.h"
+#include "NewGame/Features/Abilities/LandMovement.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/RangedAttack.h"
+#include "NewGame/Features/Abilities/PoisonArrows.h"
 
 namespace swexp::game::composition
 {

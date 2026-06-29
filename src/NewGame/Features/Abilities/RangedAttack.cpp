@@ -1,14 +1,15 @@
-#include "NewGame/Game/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/RangedAttack.h"
 
 #include "IO/interface.include.h"
+#include "NewGame/Core/Manipulation/Helpers.h"
 
 namespace swexp::game::ability
 {
     namespace ask = ::swexp::core::manipulation;
 
-    void MeleeAttack::Actions::attack(Writing writing, Id attackerId, entity::Unit::Id targetId)
+    void RangedAttack::Actions::attack(Writing writing, Id attackerId, entity::Unit::Id targetId)
     {
-        const auto damage = Get(writing, attackerId).strength;
+        const auto damage = Get(writing, attackerId).damage;
         auto& target = ask::get<entity::Unit>(writing, targetId);
 
         target.hitPoints = target.hitPoints > damage

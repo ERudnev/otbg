@@ -1,11 +1,11 @@
 #pragma once
 
-#include "NewGame/Game/Entities/Map.h"
-#include "NewGame/Game/Entities/Unit.h"
-#include "NewGame/Game/Abilities/Rending.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/RangedAttack.h"
-#include "NewGame/Game/Effects/Poisoned.h"
+#include "NewGame/Features/Entities/Map.h"
+#include "NewGame/Features/Entities/Unit.h"
+#include "NewGame/Features/Abilities/Rending.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/RangedAttack.h"
+#include "NewGame/Features/Effects/Poisoned.h"
 #include "NewGame/Core/Types.h"
 
 // TODO: separate as project growth

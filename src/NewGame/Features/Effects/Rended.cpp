@@ -1,4 +1,4 @@
-#include "NewGame/Game/Effects/Rended.h"
+#include "NewGame/Features/Effects/Rended.h"
 
 namespace swexp::game::effect
 {

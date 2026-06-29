@@ -1,4 +1,4 @@
-#include "NewGame/Game/Compositions/Hunter.h"
+#include "NewGame/Features/Compositions/Hunter.h"
 
 #include <format>
 #include <vector>
@@ -7,11 +7,11 @@
 #include "NewGame/Core/Interface/InjectedRandomDevice.h"
 #include "NewGame/Core/Manipulation/Helpers.h"
 #include "NewGame/Core/Mechanism/Helpers.h"
-#include "NewGame/Game/Abilities/MeleeAttack.h"
-#include "NewGame/Game/Abilities/PoisonArrows.h"
-#include "NewGame/Game/Abilities/RangedAttack.h"
-#include "NewGame/Game/Effects/OrderedToMove.h"
-#include "NewGame/Game/Entities/Map.h"
+#include "NewGame/Features/Abilities/MeleeAttack.h"
+#include "NewGame/Features/Abilities/PoisonArrows.h"
+#include "NewGame/Features/Abilities/RangedAttack.h"
+#include "NewGame/Features/Effects/OrderedToMove.h"
+#include "NewGame/Features/Entities/Map.h"
 
 namespace swexp::game::composition
 {

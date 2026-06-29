@@ -1,8 +1,8 @@
-#include "NewGame/Game/Entities/Map.h"
+#include "NewGame/Features/Entities/Map.h"
 
 #include "IO/interface.include.h"
 #include "NewGame/Core/Mechanism/Helpers.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Entities/Unit.h"
 
 #include <cstdlib>
 

@@ -4,5 +4,5 @@
 
 // Public Project Interface
 
-#include "NewGame/Game/World.h"
+#include "NewGame/World.h"
 #include "NewGame/Core/Interface/InjectedRandomDevice.h" // Inject expernal dependency here...

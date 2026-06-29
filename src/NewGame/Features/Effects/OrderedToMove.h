@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Entities/Unit.h"
 
 #include <optional>
 

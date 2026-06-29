@@ -1,17 +1,19 @@
 #pragma once
 
 #include "NewGame/Core/Interface/features.api.h"
-#include "NewGame/Game/Entities/Unit.h"
+#include "NewGame/Features/Entities/Unit.h"
 
 namespace swexp::game::ability
 {
     using namespace swexp::core::api;
 
-    struct MeleeAttack : Extension<MeleeAttack, entity::Unit> {
-        using Strength = uint32_t;
+    struct RangedAttack : Extension<RangedAttack, entity::Unit> {
+        using Range = uint32_t;
 
         struct State {
-            Strength strength;
+            Range minRange{2};
+            Range maxRange;
+            uint32_t damage;
         };
 
         struct Actions final : BaseActions {

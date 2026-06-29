@@ -1,10 +1,10 @@
-#include "NewGame/Game/Effects/Poisoned.h"
+#include "NewGame/Features/Effects/Poisoned.h"
 
 #include <algorithm>
 
 #include "IO/interface.include.h"
 #include "NewGame/Core/Manipulation/Helpers.h"
-#include "NewGame/Game/Effects/Rended.h"
+#include "NewGame/Features/Effects/Rended.h"
 
 namespace swexp::game::effect
 {
