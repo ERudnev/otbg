@@ -1,16 +1,35 @@
 #pragma once
 
+#include "IO/System/EventSystem.hpp"
 #include "NewGame/Core/Model/_forwards.h"
 
 namespace swexp::core::operations
 {
-    // this is placeholder for Operational semantics
-    struct ContextData {
-        model::complex::State& state;
+    // This objects are intended to be copied through stack in user function calls like:
+    // Foo::Actons::MakeSomething(Context where, Value howMuch);
+    struct ContextReadingData {
+        const model::complex::State& state;
     };
 
-    struct ContextUpdatesData {
-        const model::complex::State& current;
-        model::complex::State& planned;
+    struct ContextWritingData {
+        model::complex::State& state;
+
+        operator ContextReadingData() const { return {state}; }
+    };
+
+    struct ContextReactionsData {
+        const ContextReadingData initial;
+        const ContextWritingData updated;
+        model::complex::State& adjustments;
+
+        operator ContextReadingData() const { return {updated.state}; }
+        operator ContextWritingData() { return {adjustments}; }
+    };
+
+    struct ContextEmittersData {
+        const ContextWritingData updated;
+        sw::EventSystem& listener;
+
+        operator ContextReadingData() const { return {updated.state}; }
     };
 }

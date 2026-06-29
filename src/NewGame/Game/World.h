@@ -2,6 +2,8 @@
 
 #include <map>
 
+#include "NewGame/Core/Operations/_forwards.h"
+#include "NewGame/Core/Mechanism/ScopedTransaction.h"
 #include "NewGame/Core/Interface/features.api.h"
 // TODO: convert World to private-implemented to avoid of this includes
 #include "NewGame/Core/Model/Complex.h"
@@ -51,7 +53,6 @@ namespace swexp::game
 		*/
 
 		sw::EventSystem& eventReceiver;
-		// Core entities
 		Schema schema;
 		core::model::complex::State state;
 
@@ -59,5 +60,14 @@ namespace swexp::game
 		Turn currentTurn{0};
         entity::Map::Id map;
 		std::map<UnitId, entity::Unit::Id> registeredUnits;
+
+		// private using as bringe to Entity::Actions interface
+		// this makes World as "Entity with Actions"
+		using Reading = core::api::context::Reading;
+        using Writing = core::api::context::Writing;
+		using Transaction = core::mechanism::ScopedTransaction;
+
+		// details:
+		void normalize();
 	};
 }

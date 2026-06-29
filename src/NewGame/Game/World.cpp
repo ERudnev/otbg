@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include "Core/Model/Intertype.h"
+#include "Core/Mechanism/StateProcessing.h"
 #include "IO/interface.include.h"
 #include "NewGame/Core/Interface/macros.h"
 #include "NewGame/Game/World.h"
@@ -56,6 +57,11 @@ namespace swexp::game
 		map = state.line<entity::Map>().createEntity({0,0});
 	}
 
+	void World::normalize()
+	{
+		//const auto results = core::operations::Normalizer::repair(state);
+	}
+
 	void World::createMap(uint32_t, uint32_t)
 	{
 		_INCOMPLETE_;
@@ -63,9 +69,11 @@ namespace swexp::game
 
 	void World::spawnSwordsman(UnitId id, const composition::Swordsman::Actions::SpawnParameters& parameters)
 	{
-		// check if caller wants
+		Transaction tx(state, eventReceiver);
+		// check if caller wants to replace unit
 		//with<entity::Unit>::remove(state, id);
 		//core::operations::normalize(state);
+		registeredUnits[id] = with<composition::Swordsman>::spawn(tx, parameters);
 
 		_INCOMPLETE_;
 	}

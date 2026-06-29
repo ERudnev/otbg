@@ -22,8 +22,8 @@ namespace swexp::core::cetegory
         struct BaseActions {
             // injecting to operations signatures to allow
             // "Foo::Logic::getValue(Reading, Id)->Foo::Property"
-            using Reading = ::swexp::core::operations::ReadingContext;
-            using Writing = ::swexp::core::operations::WritingContext;
+            using Reading = api::context::Reading;
+            using Writing = api::context::Writing;
 
         protected:
             static const meta::Item<Meta>& Get(Reading context, Id id) { return context.state.line<Meta>().elements.at(id); }
@@ -31,11 +31,11 @@ namespace swexp::core::cetegory
         };
 
         struct BaseReactions {
+            using Reacting = api::context::Reacting;
         };
 
         struct BaseEmitters {
-            // TODO: rename
-            using Analysis = ::swexp::core::operations::AnalyticContext;
+            using Emitting = api::context::Emitting;
         };
     };
 

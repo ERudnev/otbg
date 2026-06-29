@@ -25,7 +25,7 @@ namespace swexp::game::composition
 
         struct Actions final : BaseActions {
             struct SpawnParameters {
-                entity::Map::Position position;
+                entity::Unit::State unit;
                 ability::MeleeAttack::State melee;
                 ability::Rending::State rending;
             };
