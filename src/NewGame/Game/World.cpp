@@ -76,6 +76,12 @@ namespace swexp::game
 		registeredUnits.push_back(with<composition::Swordsman>::spawn(tx, parameters));
 	}
 
+	void World::spawnHunter(UnitId id, const composition::Hunter::Actions::SpawnParameters& parameters)
+	{
+		Transaction tx(state, core::ReportingContext{currentTurn, &eventReceiver});
+		registeredUnits.push_back(with<composition::Hunter>::spawn(tx, parameters));
+	}
+
 	void World::march(UnitId externalUnitId, Position target)
 	{
 		const auto registered = std::ranges::find(updatedList(registeredUnits), externalUnitId);

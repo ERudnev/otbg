@@ -11,6 +11,7 @@
 #include "NewGame/Game/_types.exports.h"
 
 // this include must be removed with SpawnType exported
+#include "NewGame/Game/Compositions/Hunter.h"
 #include "NewGame/Game/Compositions/Swordsman.h"
 
 namespace sw
@@ -37,6 +38,7 @@ namespace swexp::game
 
 		// TODO: refactor with unit classes: {HP+Pos+HP} + C1{S, C, R}
 		void spawnSwordsman(UnitId, const composition::Swordsman::Actions::SpawnParameters&);
+		void spawnHunter(UnitId, const composition::Hunter::Actions::SpawnParameters&);
 
 		void march(UnitId, Position);
 

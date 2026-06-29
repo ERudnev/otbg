@@ -17,6 +17,17 @@ namespace swexp::game::composition
         };
 
         struct Actions final : BaseActions {
+            struct SpawnParameters {
+                entity::Unit::Id externalId;
+                entity::Map::Position position;
+                entity::Unit::HitPoints hitPoints;
+                ability::RangedAttack::State ranged;
+                ability::MeleeAttack::State melee;
+                ability::PoisonArrows::State poisonArrows;
+            };
+
+            static auto spawn(Writing, const SpawnParameters&) -> entity::Unit::Id;
+            static bool makeTurn(Writing, Id);
         };
 
         struct Reactions final : BaseReactions {
@@ -24,7 +35,8 @@ namespace swexp::game::composition
         };
 
         struct Emitters final : BaseEmitters {
-            static void _generated_call_all(Emitting) {}
+            static void _generated_call_all(Emitting);
+            static void unitSpawned(Emitting);
         };
     };
 }

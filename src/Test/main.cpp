@@ -44,9 +44,18 @@ int main(int, char**)
                                 });
                     });
             parser.add<io::SpawnHunter>(
-                    [](auto command)
+                    [&world](auto command)
                     {
-                        //TODO
+                        world.spawnHunter(
+                                command.unitId,
+                                game::composition::Hunter::Actions::SpawnParameters{
+                                        .externalId = command.unitId,
+                                        .position = {command.x, command.y},
+                                        .hitPoints = command.hp,
+                                        .ranged = {.minRange = 2, .maxRange = command.range, .damage = command.agility},
+                                        .melee = {.strength = command.strength},
+                                        .poisonArrows = {.chance = command.chance, .damage = command.poison, .duration = 5},
+                                });
                     });
             parser.add<io::March>([&world](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); });
 

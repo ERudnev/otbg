@@ -17,6 +17,7 @@ namespace swexp::game::ability
         };
 
         struct Actions final : BaseActions {
+            static void attack(Writing, Id attackerId, entity::Unit::Id targetId);
         };
 
         struct Reactions final : BaseReactions {
